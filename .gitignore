@@ -1,0 +1,44 @@
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+
+# Compiled output
+/kp-frontend/dist
+/kp-frontend/tmp
+/kp-frontend/out-tsc
+/kp-frontend/bazel-out
+
+# Node
+/kp-frontend/node_modules
+/kp-frontend/npm-debug.log
+/kp-frontend/yarn-error.log
+
+# IDEs and editors
+/kp-frontend/.idea/
+/kp-frontend/.project
+/kp-frontend/.classpath
+/kp-frontend/.c9/
+/kp-frontend/*.launch
+/kp-frontend/.settings/
+/kp-frontend/*.sublime-workspace
+
+# Visual Studio Code
+/kp-frontend/.vscode/*
+/kp-frontend/!.vscode/settings.json
+/kp-frontend/!.vscode/tasks.json
+/kp-frontend/!.vscode/launch.json
+/kp-frontend/!.vscode/extensions.json
+/kp-frontend/!.vscode/mcp.json
+/kp-frontend/.history/*
+
+# Miscellaneous
+/kp-frontend/.angular/cache
+/kp-frontend/.sass-cache/
+/kp-frontend/connect.lock
+/kp-frontend/coverage
+/kp-frontend/libpeerconnection.log
+/kp-frontend/testem.log
+/kp-frontend/typings
+/kp-frontend/__screenshots__/
+
+# System files
+/kp-frontend/.DS_Store
+/kp-frontend/Thumbs.db
