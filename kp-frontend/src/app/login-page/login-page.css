@@ -1,0 +1,20 @@
+.login-body {
+    margin: auto;
+    width: fit-content;
+}
+
+.login-page-container {
+    margin: auto;
+
+    padding-top: 15rem;
+    width: 95vw;
+}
+
+.register-redirect {
+    text-align: center;
+    color: gray;
+}
+
+.register-link {
+    color: green !important;
+}
