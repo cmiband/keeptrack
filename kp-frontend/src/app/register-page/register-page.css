@@ -1,0 +1,12 @@
+.register-page-container {
+    margin: auto;
+
+    padding-top: 15rem;
+    width: 95vw;
+}
+
+.register-body {
+    margin: auto;
+    width: fit-content;
+    padding-top: 2rem;
+}
