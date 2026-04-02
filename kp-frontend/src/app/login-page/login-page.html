@@ -3,10 +3,13 @@
     <div class="login-body">
         <h1 class="header-main">Welcome back!</h1>
         <div class="text-input-container">
-            <input class="text-input" id="email" placeholder="Email" type="text">
+            <input class="text-input" id="email" placeholder="Email" type="email" [(ngModel)]="email">
         </div>
-        <div class="text-input-container">
-            <input class="text-input" id="password" placeholder="Password" type="password">
+        <div class="password-button-container">
+            <div class="text-input-container">
+                <input class="text-input" id="password" placeholder="Password" type="password" [(ngModel)]="password">
+            </div>
+            <img class="login-button" src="/loginButton.svg" (click)="handleLogin()">
         </div>
         <p class="register-redirect">Don't have an account? <a class="register-link" routerLink="/register">Sign up!</a></p>
     </div>

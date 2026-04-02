@@ -6,6 +6,19 @@ body {
     background-repeat: no-repeat;
 }
 
+.button-brand {
+    width: 100%;
+    line-height: 2rem;
+    font-size: 1.1rem;
+
+    color: white;
+    background: linear-gradient(270deg, rgba(87, 199, 133, 1) 0%, rgba(42, 123, 155, 1) 70%);
+    cursor: pointer;
+
+    border: none;
+    border-radius: 5px;
+}
+
 .logo-image {
     width: 150px;
     height: 180px;
@@ -21,6 +34,7 @@ body {
 .text-input {
     border: 1px solid lightgray;
     width: 30vw;
+    min-width: 300px;
     line-height: 2rem;
     padding: 0.1rem 0.8rem 0.1rem 0.8rem;
     border-radius: 5px;

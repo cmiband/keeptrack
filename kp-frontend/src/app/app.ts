@@ -19,5 +19,7 @@ export class App implements AfterViewInit {
       this.router.navigate(['/login']);
       return;
     }
+
+    this.router.navigate(['/home']);
   }
 }

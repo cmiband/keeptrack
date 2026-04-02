@@ -1,1 +1,15 @@
-<p>register-page works!</p>
+<div class="register-page-container">
+    <img class="logo-image" src="/kkeeptrackk.png"/>
+    <div class="register-body">
+        <div class="text-input-container">
+            <input class="text-input" id="email" placeholder="Email" type="email" [(ngModel)]="email">
+        </div>
+        <div class="text-input-container">
+            <input class="text-input" id="password" placeholder="Password" type="password" [(ngModel)]="password">
+        </div>
+        <div class="text-input-container">
+            <input class="text-input" id="username" placeholder="Username" type="text" [(ngModel)]="username">
+        </div>
+        <button class="button-brand" type="button" (click)="handleRegister()">Create account!</button>
+    </div>
+</div>

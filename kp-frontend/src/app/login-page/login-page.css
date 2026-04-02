@@ -18,3 +18,16 @@
 .register-link {
     color: green !important;
 }
+
+.login-button {
+    width: 30px;
+
+    margin-top: 5px;
+    margin-left: 0.5rem;
+    cursor: pointer;
+}
+
+.password-button-container {
+    display: flex;
+    align-items: flex-start;
+}
