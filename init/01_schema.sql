@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict I7gcmyrxMb195yQNTAZj34egRNaD368ueLOASmGbjdTqULensdr8tuOVW6actPG
+\restrict zqZxdIrOfM9SUffChzsWhKUnl92Ph3eoeB1MhJvEzc0Q8RpeYRPt2eI4t8yRutb
 
 -- Dumped from database version 18.3 (Debian 18.3-1.pgdg13+1)
 -- Dumped by pg_dump version 18.3 (Debian 18.3-1.pgdg13+1)
@@ -59,6 +59,19 @@ ALTER SEQUENCE public.board_boardid_seq OWNED BY public.board.boardid;
 
 
 --
+-- Name: boardassignment; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.boardassignment (
+    boardassignmentid SERIAL,
+    boardid integer,
+    userid integer
+);
+
+
+ALTER TABLE public.boardassignment OWNER TO postgres;
+
+--
 -- Name: task; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -66,7 +79,6 @@ CREATE TABLE public.task (
     taskid integer NOT NULL,
     taskname character varying(255),
     authorid integer NOT NULL,
-    asigneeid integer,
     description character varying(255),
     status character varying(255),
     createddate date,
@@ -99,6 +111,19 @@ ALTER SEQUENCE public.task_taskid_seq OWNED BY public.task.taskid;
 
 
 --
+-- Name: taskassignment; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.taskassignment (
+    taskassignmentid SERIAL,
+    taskid integer,
+    userid integer
+);
+
+
+ALTER TABLE public.taskassignment OWNER TO postgres;
+
+--
 -- Name: users; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -109,7 +134,7 @@ CREATE TABLE public.users (
     age integer,
     email character varying(255),
     username character varying(255),
-    createdat date
+    createddate date
 );
 
 
@@ -167,10 +192,26 @@ COPY public.board (boardid, boardname, authorid) FROM stdin;
 
 
 --
+-- Data for Name: boardassignment; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.boardassignment (boardassignmentid, boardid, userid) FROM stdin;
+\.
+
+
+--
 -- Data for Name: task; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.task (taskid, taskname, authorid, asigneeid, description, status, createddate, targetdate) FROM stdin;
+COPY public.task (taskid, taskname, authorid, description, status, createddate, targetdate) FROM stdin;
+\.
+
+
+--
+-- Data for Name: taskassignment; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.taskassignment (taskassignmentid, taskid, userid) FROM stdin;
 \.
 
 
@@ -178,7 +219,7 @@ COPY public.task (taskid, taskname, authorid, asigneeid, description, status, cr
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.users (userid, lastname, firstname, age, email, username, createdat) FROM stdin;
+COPY public.users (userid, lastname, firstname, age, email, username, createddate) FROM stdin;
 \.
 
 
@@ -231,5 +272,5 @@ ALTER TABLE ONLY public.users
 -- PostgreSQL database dump complete
 --
 
-\unrestrict I7gcmyrxMb195yQNTAZj34egRNaD368ueLOASmGbjdTqULensdr8tuOVW6actPG
+\unrestrict zqZxdIrOfM9SUffChzsWhKUnl92Ph3eoeB1MhJvEzc0Q8RpeYRPt2eI4t8yRutb
 
