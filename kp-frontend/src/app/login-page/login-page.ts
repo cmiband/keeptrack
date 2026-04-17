@@ -22,8 +22,25 @@ export class LoginPage implements AfterViewInit {
       this.router.navigate(['/home']);
     }
   }
-
-  handleLogin() : void {
   
+  handleLogin() : void {
+    
+  console.log("Dane:", this.email, this.password);
+    const loginData = {
+    username: this.email, 
+    password: this.password
+  };
+
+  this.authService.login(loginData).subscribe({
+    next: (response) => {
+      console.log('Sukces! Token jest w localStorage');
+      this.router.navigate(['/home']); 
+    },
+    error: (err) => {
+      console.error('Błąd logowania:', err);
+      alert('Nieprawidłowy login lub hasło');
+    }
+  });
   }
+  
 }
