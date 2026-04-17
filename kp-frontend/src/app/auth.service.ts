@@ -11,7 +11,7 @@ export class AuthService {
         return !!localStorage.getItem('token');
     }
 
-    login(credentials: {username: string, password: string}) {
+    login(credentials: {email: string, password: string}) {
         return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
             tap(response => {
                
@@ -23,6 +23,10 @@ export class AuthService {
         );
     }
    
+    register(data: {username: string, password: string, email: string}) {
+        return this.http.post<any>('http://localhost:8080/users', data);
+    }
+
     logout() {
         localStorage.removeItem('token');
     }

@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-home',
@@ -17,5 +19,13 @@ export class Home {
     } else {
       console.warn('Brak tokena w localStorage!');
     }
+  }
+  
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

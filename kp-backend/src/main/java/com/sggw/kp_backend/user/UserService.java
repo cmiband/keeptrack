@@ -17,13 +17,14 @@ public class UserService {
             throw new IllegalArgumentException("Username already taken");
         }
 
+        if (userRepository.findByEmail(request.getEmail()) != null) {
+            throw new IllegalArgumentException("Email już zajęty");
+        }
+
         var user = new User();
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setEmail(request.getEmail());
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setAge(request.getAge());
         user.setCreatedDate(LocalDate.now());
 
         return userRepository.save(user);

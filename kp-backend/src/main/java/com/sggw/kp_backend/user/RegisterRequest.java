@@ -2,6 +2,7 @@ package com.sggw.kp_backend.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -15,15 +16,9 @@ public class RegisterRequest {
     @Size(min = 6, max = 25, message = "Password must be between 6 and 25 characters long")
     private String password;
 
-    @Email(message = "Email must be valid")
+    @NotBlank(message = "Email is required")
+    @Email(message = "Email musi być poprawny")
+    @Pattern(regexp = "^[\\w.+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$", message = "Email musi być poprawny")
     @Size(max = 255, message = "Email is too long")
     private String email;
-
-    @Size(max = 255, message = "Last name is too long")
-    private String lastName;
-
-    @Size(max = 50, message = "First name is too long")
-    private String firstName;
-
-    private Integer age;
 }

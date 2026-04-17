@@ -14,13 +14,13 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        var user = userRepository.findByUsername(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        var user = userRepository.findByEmail(email);
         if (user == null) {
-            throw new UsernameNotFoundException("User not found with username: " + username);
+            throw new UsernameNotFoundException("User not found with email: " + email);
         }
 
-        return User.withUsername(user.getUsername())
+        return User.withUsername(user.getEmail())
                 .password(user.getPassword())
                 .authorities(new String[0])
                 .build();
