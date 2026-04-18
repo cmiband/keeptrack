@@ -11,19 +11,39 @@ import { inject, AfterViewInit } from '@angular/core';
   styleUrl: './login-page.css',
 })
 export class LoginPage implements AfterViewInit {
-  email : string = "";
-  password : string = "";
+  email: string = "";
+  password: string = "";
+  errorMessage: string = "";
 
   authService = inject(AuthService);
   router = inject(Router);
 
   ngAfterViewInit(): void {
-    if(this.authService.isLoggedIn()) {
+    if (this.authService.isLoggedIn()) {
       this.router.navigate(['/home']);
     }
   }
 
-  handleLogin() : void {
-  
+  handleLogin(): void {
+    this.errorMessage = "";
+    console.log("Data:", this.email, this.password);
+
+    const loginData = {
+      email: this.email,
+      password: this.password
+    };
+
+    this.authService.login(loginData).subscribe({
+      next: () => {
+        this.router.navigate(['/home']);
+      },
+      error: (err) => {
+        if (err.status === 401) {
+          this.errorMessage = 'Invalid email or password';
+        } else {
+          this.errorMessage = 'Login error';
+        }
+      }
+    });
   }
 }

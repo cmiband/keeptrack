@@ -1,14 +1,33 @@
-import { Injectable } from "@angular/core";
+import { inject, Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { tap } from "rxjs";
 
 @Injectable({providedIn: 'root'})
 export class AuthService {
-    private loggedIn = false;
+    private http = inject(HttpClient);
+    private apiUrl = 'http://localhost:8080/auth';
 
     isLoggedIn() {
-        return this.loggedIn;
+        return !!localStorage.getItem('token');
     }
 
-    login() {
-        this.loggedIn = true;
+    login(credentials: {email: string, password: string}) {
+        return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
+            tap(response => {
+               
+                if (response && response.token) {
+                    localStorage.setItem('token', response.token);
+                    console.log('token zapisany!');
+                }
+            })
+        );
+    }
+   
+    register(data: {username: string, password: string, email: string}) {
+        return this.http.post<any>('http://localhost:8080/users', data);
+    }
+
+    logout() {
+        localStorage.removeItem('token');
     }
 }

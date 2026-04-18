@@ -10,6 +10,9 @@
         <div class="text-input-container">
             <input class="text-input" id="username" placeholder="Username" type="text" [(ngModel)]="username">
         </div>
+        @if (errorMessage) {
+            <p class="error-message" style="color: red; font-size: 14px; text-align: center; white-space: pre-line;">{{ errorMessage }}</p>
+        }
         <button class="button-brand" type="button" (click)="handleRegister()">Create account!</button>
     </div>
 </div>
