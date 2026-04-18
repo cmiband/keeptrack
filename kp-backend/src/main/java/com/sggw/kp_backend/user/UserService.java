@@ -18,7 +18,7 @@ public class UserService {
         }
 
         if (userRepository.findByEmail(request.getEmail()) != null) {
-            throw new IllegalArgumentException("Email już zajęty");
+            throw new IllegalArgumentException("Email already taken");
         }
 
         var user = new User();

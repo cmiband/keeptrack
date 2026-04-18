@@ -17,8 +17,8 @@ public class RegisterRequest {
     private String password;
 
     @NotBlank(message = "Email is required")
-    @Email(message = "Email musi być poprawny")
-    @Pattern(regexp = "^[\\w.+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$", message = "Email musi być poprawny")
+    @Email(message = "Email must be valid")
+    @Pattern(regexp = "^[\\w.+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$", message = "Email must be valid")
     @Size(max = 255, message = "Email is too long")
     private String email;
 }

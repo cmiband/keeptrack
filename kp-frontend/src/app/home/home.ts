@@ -10,14 +10,13 @@ import { AuthService } from '../auth.service';
 })
 export class Home {
   ngOnInit() {
-    // Wyciągamy bilet z szuflady i pokazujemy go w konsoli
-    const mojToken = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     
-    console.log('--- TEST SESJI ---');
-    if (mojToken) {
-      console.log('Znaleziono token:', mojToken);
+    console.log('--- SESSION TEST ---');
+    if (token) {
+      console.log('Token found:', token);
     } else {
-      console.warn('Brak tokena w localStorage!');
+      console.warn('No token in localStorage!');
     }
   }
   

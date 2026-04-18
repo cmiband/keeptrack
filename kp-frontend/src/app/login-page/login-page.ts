@@ -26,7 +26,7 @@ export class LoginPage implements AfterViewInit {
 
   handleLogin(): void {
     this.errorMessage = "";
-    console.log("Dane:", this.email, this.password);
+    console.log("Data:", this.email, this.password);
 
     const loginData = {
       email: this.email,
@@ -39,9 +39,9 @@ export class LoginPage implements AfterViewInit {
       },
       error: (err) => {
         if (err.status === 401) {
-          this.errorMessage = 'Nieprawidłowy email lub hasło';
+          this.errorMessage = 'Invalid email or password';
         } else {
-          this.errorMessage = 'Błąd logowania';
+          this.errorMessage = 'Login error';
         }
       }
     });

@@ -41,7 +41,7 @@ export class RegisterPage implements AfterViewInit {
         if (err.error?.message) {
           this.errorMessage = err.error.message;
         } else {
-          this.errorMessage = 'Błąd rejestracji';
+          this.errorMessage = 'Registration error';
         }
       }
     });
