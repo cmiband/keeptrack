@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict zqZxdIrOfM9SUffChzsWhKUnl92Ph3eoeB1MhJvEzc0Q8RpeYRPt2eI4t8yRutb
+\restrict CCtPjTAs18ofw8U9qVexcWvgzZsy82z0cxqeVzzq4XuySFanGxeC4yKsLWwsptD
 
 -- Dumped from database version 18.3 (Debian 18.3-1.pgdg13+1)
 -- Dumped by pg_dump version 18.3 (Debian 18.3-1.pgdg13+1)
@@ -63,13 +63,35 @@ ALTER SEQUENCE public.board_boardid_seq OWNED BY public.board.boardid;
 --
 
 CREATE TABLE public.boardassignment (
-    boardassignmentid SERIAL,
+    boardassignmentid integer NOT NULL,
     boardid integer,
     userid integer
 );
 
 
 ALTER TABLE public.boardassignment OWNER TO postgres;
+
+--
+-- Name: boardassignment_boardassignmentid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.boardassignment_boardassignmentid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.boardassignment_boardassignmentid_seq OWNER TO postgres;
+
+--
+-- Name: boardassignment_boardassignmentid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.boardassignment_boardassignmentid_seq OWNED BY public.boardassignment.boardassignmentid;
+
 
 --
 -- Name: task; Type: TABLE; Schema: public; Owner: postgres
@@ -79,10 +101,10 @@ CREATE TABLE public.task (
     taskid integer NOT NULL,
     taskname character varying(255),
     authorid integer NOT NULL,
-    description character varying(255),
-    status character varying(255),
+    description text,
     createddate date,
-    targetdate date
+    targetdate date,
+    boardid integer
 );
 
 
@@ -115,13 +137,107 @@ ALTER SEQUENCE public.task_taskid_seq OWNED BY public.task.taskid;
 --
 
 CREATE TABLE public.taskassignment (
-    taskassignmentid SERIAL,
+    taskassignmentid integer NOT NULL,
     taskid integer,
     userid integer
 );
 
 
 ALTER TABLE public.taskassignment OWNER TO postgres;
+
+--
+-- Name: taskassignment_taskassignmentid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.taskassignment_taskassignmentid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.taskassignment_taskassignmentid_seq OWNER TO postgres;
+
+--
+-- Name: taskassignment_taskassignmentid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.taskassignment_taskassignmentid_seq OWNED BY public.taskassignment.taskassignmentid;
+
+
+--
+-- Name: taskcomment; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.taskcomment (
+    taskcommentid integer NOT NULL,
+    authorid integer,
+    createddate date,
+    commentbody text,
+    taskid integer NOT NULL
+);
+
+
+ALTER TABLE public.taskcomment OWNER TO postgres;
+
+--
+-- Name: taskcomment_taskcommentid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.taskcomment_taskcommentid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.taskcomment_taskcommentid_seq OWNER TO postgres;
+
+--
+-- Name: taskcomment_taskcommentid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.taskcomment_taskcommentid_seq OWNED BY public.taskcomment.taskcommentid;
+
+
+--
+-- Name: taskstatus; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.taskstatus (
+    taskstatusid integer NOT NULL,
+    statusname character varying(255),
+    statuslabel character varying(255)
+);
+
+
+ALTER TABLE public.taskstatus OWNER TO postgres;
+
+--
+-- Name: taskstatus_taskstatusid_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public.taskstatus_taskstatusid_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public.taskstatus_taskstatusid_seq OWNER TO postgres;
+
+--
+-- Name: taskstatus_taskstatusid_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.taskstatus_taskstatusid_seq OWNED BY public.taskstatus.taskstatusid;
+
 
 --
 -- Name: users; Type: TABLE; Schema: public; Owner: postgres
@@ -131,7 +247,6 @@ CREATE TABLE public.users (
     userid integer NOT NULL,
     lastname character varying(255),
     firstname character varying(50),
-    age integer,
     email character varying(255),
     username character varying(255),
     createddate date
@@ -170,6 +285,13 @@ ALTER TABLE ONLY public.board ALTER COLUMN boardid SET DEFAULT nextval('public.b
 
 
 --
+-- Name: boardassignment boardassignmentid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.boardassignment ALTER COLUMN boardassignmentid SET DEFAULT nextval('public.boardassignment_boardassignmentid_seq'::regclass);
+
+
+--
 -- Name: task taskid; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -177,71 +299,31 @@ ALTER TABLE ONLY public.task ALTER COLUMN taskid SET DEFAULT nextval('public.tas
 
 
 --
+-- Name: taskassignment taskassignmentid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.taskassignment ALTER COLUMN taskassignmentid SET DEFAULT nextval('public.taskassignment_taskassignmentid_seq'::regclass);
+
+
+--
+-- Name: taskcomment taskcommentid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.taskcomment ALTER COLUMN taskcommentid SET DEFAULT nextval('public.taskcomment_taskcommentid_seq'::regclass);
+
+
+--
+-- Name: taskstatus taskstatusid; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.taskstatus ALTER COLUMN taskstatusid SET DEFAULT nextval('public.taskstatus_taskstatusid_seq'::regclass);
+
+
+--
 -- Name: users userid; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY public.users ALTER COLUMN userid SET DEFAULT nextval('public.users_userid_seq'::regclass);
-
-
---
--- Data for Name: board; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.board (boardid, boardname, authorid) FROM stdin;
-\.
-
-
---
--- Data for Name: boardassignment; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.boardassignment (boardassignmentid, boardid, userid) FROM stdin;
-\.
-
-
---
--- Data for Name: task; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.task (taskid, taskname, authorid, description, status, createddate, targetdate) FROM stdin;
-\.
-
-
---
--- Data for Name: taskassignment; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.taskassignment (taskassignmentid, taskid, userid) FROM stdin;
-\.
-
-
---
--- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.users (userid, lastname, firstname, age, email, username, createddate) FROM stdin;
-\.
-
-
---
--- Name: board_boardid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.board_boardid_seq', 1, false);
-
-
---
--- Name: task_taskid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.task_taskid_seq', 1, false);
-
-
---
--- Name: users_userid_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public.users_userid_seq', 1, false);
 
 
 --
@@ -261,6 +343,22 @@ ALTER TABLE ONLY public.task
 
 
 --
+-- Name: taskcomment taskcomment_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.taskcomment
+    ADD CONSTRAINT taskcomment_pkey PRIMARY KEY (taskcommentid);
+
+
+--
+-- Name: taskstatus taskstatus_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.taskstatus
+    ADD CONSTRAINT taskstatus_pkey PRIMARY KEY (taskstatusid);
+
+
+--
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -272,5 +370,5 @@ ALTER TABLE ONLY public.users
 -- PostgreSQL database dump complete
 --
 
-\unrestrict zqZxdIrOfM9SUffChzsWhKUnl92Ph3eoeB1MhJvEzc0Q8RpeYRPt2eI4t8yRutb
+\unrestrict CCtPjTAs18ofw8U9qVexcWvgzZsy82z0cxqeVzzq4XuySFanGxeC4yKsLWwsptD
 
