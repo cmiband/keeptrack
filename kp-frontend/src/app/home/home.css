@@ -1,0 +1,235 @@
+.container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+
+    width: 1fr;
+    height: 100%;
+    padding: 10px;
+}
+
+.box {
+    border-radius: 10px;
+    background-color: white;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+}
+
+.side-box {
+    width: 20%;
+    height: 100%;
+}
+
+.middle-column-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 60%;
+    height: 100%;
+}
+
+.middle-box {
+    width: 100%;
+    height: 100%;
+}
+
+.title-text {
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 30px;
+    color: white;
+    text-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.title-row {
+    display: flex;
+    align-items: baseline;
+    gap: 15px;
+    margin-bottom: 10px;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.btn {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    border: none;
+    border-radius: 5px;
+    font-size: 15px;
+    font-weight: bold;
+    padding: 5px;
+    padding-right: 8px;
+    padding-left: 8px;
+    cursor: pointer;
+}
+
+.btn-list-kanban {
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.btn-list-kanban.active {
+    color: gray;
+    background-color: white;
+}
+
+.btn-filter {
+    border-radius: 20px;
+}
+
+.btn i {
+    font-size: 15px;
+    margin-right: 5px;
+}
+
+.board {
+    display: flex;
+    margin: 15px;
+
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}
+
+.board-square {
+    background-color: green;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: white;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.board-info {
+    margin-left: 10px;
+    overflow: hidden;
+}
+
+.board-title {
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.board-members {
+    font-size: 12px;
+    color: gray;
+}
+
+.btn-createWorkspace {
+    display: flex;
+    margin: 15px;
+    background-color: white;
+    border: none;
+    color: grey;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.triangle-down {
+    width: 0;
+    height: 0;
+    border-left: 50px solid transparent;
+    border-right: 50px solid transparent;
+    border-top: 100px solid red;
+}
+
+.btn-long {
+    display: flex;
+    text-align: start;
+    align-items: center;
+    margin: 10px;
+    width: calc(100% - 20px);
+    background-color: rgba(128, 128, 128, 0.2);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.btn-long-icon {
+    margin-left: 5px;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    background-color: #5CD27D;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    color: green;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.btn-long-text {
+    margin-left: 10px;
+    font-weight: bold;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-grow: 1;
+}
+
+.btn-long-icon2 {
+    margin-left: 5px;
+    font-size: 25px;
+    color: gray;
+}
+
+.direct-messages-style {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+
+    color: gray;
+    font-weight: bold;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.direct-messages-user-avatar {
+    margin-left: 0px;
+    height: 20px;
+    width: 20px;
+    font-size: 11px;
+    flex-shrink: 0;
+}
+
+.direct-messages-user {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+
+    margin: 0;
+    margin-left: 8px;
+    font-size: 14px;
+    color: gray;
+    font-weight: bold;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

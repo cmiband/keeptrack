@@ -1,2 +1,74 @@
-<p>home works!</p>
-<button (click)="logout()">Logout</button>
+<!-- <p>home works!</p>
+<button (click)="logout()">Logout</button> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<div class="container">
+    <div class="box side-box">
+        @for (item of boards; track item[0]) {
+        <button class="board">
+            <div class="board-square" [style.backgroundColor]="item[2]">{{ item[0][0] }}</div>
+            <div class="board-info">
+                <div class="board-title">{{item[0]}}</div>
+                <div class="board-members">{{item[1]}} members</div>
+            </div>
+        </button>
+        }
+        <button class="btn-createWorkspace">+ createworkspace</button>
+    </div>
+
+    <div class="middle-column-wrapper">
+        <div class="title-row">
+            <div class="title-text">projectszpont</div>
+            <button class="btn btn-list-kanban" [class.active]="activebutton === 'list'" (click)="handleClick('list')">
+                <i class="fas fa-list-ul"></i> list
+            </button>
+            <button class="btn btn-list-kanban" [class.active]="activebutton === 'kanban'"
+                (click)="handleClick('kanban')">
+                <i class="fas fa-columns"></i> kanban
+            </button>
+            <button class="btn btn-filter">
+                <i class="fas fa-caret-down"></i> filter
+            </button>
+        </div>
+        <div class="box middle-box"></div>
+    </div>
+
+    <div class="box side-box">
+        <button class="btn-long">
+            <div class="btn-long-icon">{{currentUser[0][0]}}{{currentUser[1][0]}}</div>
+            <p class="btn-long-text">profile <i class="fas fa-caret-right" style="color: gray;"></i></p>
+        </button>
+        <button class="btn-long">
+            <i class="fas fa-gear btn-long-icon2"></i>
+            <p class="btn-long-text">settings <i class="fas fa-caret-right" style="color: gray;"></i></p>
+        </button>
+        <button class="btn-long" style="background-color: white; margin-bottom: 0px; color: gray;">
+            <i class="fas fa-inbox btn-long-icon2"></i>
+            <p class="btn-long-text">inbox</p>
+        </button>
+        <button class="btn-long" style="background-color: white;margin-top: 0px; color: gray;">
+            <i class="fas fa-user btn-long-icon2" style="font-size: 28px;"></i>
+            <p class="btn-long-text">my tasks</p>
+        </button>
+        <div style="margin: 15px; color: gray; font-weight: bold;">spaces <i class="fas fa-caret-down"
+                style="color: gray;"></i></div>
+        <div style="margin: 15px; color: gray; font-weight: bold;">channels <i class="fas fa-caret-down"
+                style="color: gray;"></i></div>
+        <div style="margin: 15px;">
+            <button class="direct-messages-style" (click)="toggleDirectMessages()">direct
+                messages
+                <i class="fas" style="color: gray;"
+                    [class]="directMeesageExpand ? 'fa-caret-down' : 'fa-caret-right'"></i>
+            </button>
+            @if (directMeesageExpand) {
+            @for (item of users; track users[0]) {
+            <div style="display: flex; align-items: center; margin-top: 4px;">
+                <div class="btn-long-icon direct-messages-user-avatar" [style.backgroundColor]="item[2]">
+                    {{item[0][0]}}{{item[1][0]}}
+                </div>
+                <button class="direct-messages-user">
+                    {{item[0]}} {{item[1]}}</button>
+            </div>
+            }}
+        </div>
+    </div>
+</div>
