@@ -15,10 +15,8 @@ public class AuthSecurityRules implements SecurityRules {
     public void configure(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry registry) {
         registry
                 .requestMatchers("/error").permitAll()
-                .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                .requestMatchers(HttpMethod.POST, "/auth/refresh").permitAll()
-                .requestMatchers(HttpMethod.GET, "/auth/me").authenticated()
-                .requestMatchers(HttpMethod.POST, "/users").permitAll();
+                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/refresh", "/users/register").permitAll();
 
     }
 }
