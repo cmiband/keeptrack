@@ -1,5 +1,6 @@
 package com.sggw.kp_backend.user;
 
+import com.sggw.kp_backend.auth.AuthService;
 import com.sggw.kp_backend.auth.UserDto;
 import com.sggw.kp_backend.auth.UserMapper;
 import jakarta.validation.Valid;
@@ -18,11 +19,32 @@ import java.util.stream.Collectors;
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
+    private final AuthService authService;
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<UserDto> register(@Valid @RequestBody RegisterRequest request) {
         var user = userService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toDto(user));
+    }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<Void> delete(@PathVariable int userId) {
+        User currentUser = authService.getCurrentUser();
+        if (currentUser == null || currentUser.getId() == userId) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        userService.deleteUser(userId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<Void> update(@PathVariable int userId, @Valid @RequestBody UpdateRequest request) {
+        User currentUser = authService.getCurrentUser();
+        if (currentUser == null || currentUser.getId() == userId) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        userService.updateUser(userId, request);
+        return ResponseEntity.noContent().build();
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
