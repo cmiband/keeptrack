@@ -21,9 +21,6 @@ public class User {
     @Column(name = "firstname", length = 50)
     private String firstName;
 
-    @Column(name = "age")
-    private Integer age;
-
     @Column(name = "email")
     private String email;
 

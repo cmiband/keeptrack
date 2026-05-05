@@ -15,8 +15,6 @@ public class UpdateRequest {
     @Size(max = 255)
     private String lastName;
 
-    private Integer age;
-
     @NotBlank(message = "Username is required")
     @Size(max = 255, message = "Username is too long")
     private String username;
