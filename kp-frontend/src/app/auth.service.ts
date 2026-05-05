@@ -24,7 +24,7 @@ export class AuthService {
     }
    
     register(data: {username: string, password: string, email: string}) {
-        return this.http.post<any>('http://localhost:8080/users', data);
+        return this.http.post<any>('http://localhost:8080/users/register', data);
     }
 
     logout() {
