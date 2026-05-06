@@ -21,6 +21,10 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
+    public List<Task> getAllTasksByBoardId(int boardId) {
+        return taskRepository.findByBoardId(boardId);
+    }
+
     public Task createTask(TaskCreateRequest request) {
         Task task = new Task(null, request.getTaskName(), request.getAuthorId(),
                 request.getDescription(), LocalDate.now(),request.getTargetDate(), request.getBoardId());

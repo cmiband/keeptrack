@@ -3,6 +3,8 @@ package com.sggw.kp_backend.user;
 import com.sggw.kp_backend.auth.AuthService;
 import com.sggw.kp_backend.auth.UserDto;
 import com.sggw.kp_backend.auth.UserMapper;
+import com.sggw.kp_backend.board.BoardDto;
+import com.sggw.kp_backend.board.BoardMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -18,7 +21,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final UserBoardQueryService userBoardQueryService;
     private final UserMapper userMapper;
+    private final BoardMapper boardMapper;
     private final AuthService authService;
 
     @PostMapping("/register")
@@ -45,6 +50,13 @@ public class UserController {
         }
         userService.updateUser(userId, request);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{userId}/boards")
+    public List<BoardDto> getBoardsByUserId(@PathVariable int userId) {
+        return userBoardQueryService.getBoardsByUserId(userId).stream()
+                .map(boardMapper::boardToBoardDto)
+                .toList();
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
