@@ -35,4 +35,5 @@ public class BoardService {
         board.setBoardName(request.getBoardName());
         boardRepository.save(board);
     }
+
 }

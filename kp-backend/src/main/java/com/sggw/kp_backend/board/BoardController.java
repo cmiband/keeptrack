@@ -1,5 +1,11 @@
 package com.sggw.kp_backend.board;
 
+import com.sggw.kp_backend.auth.UserDto;
+import com.sggw.kp_backend.auth.UserMapper;
+import com.sggw.kp_backend.task.TaskDto;
+import com.sggw.kp_backend.task.TaskMapper;
+import com.sggw.kp_backend.task.TaskService;
+import com.sggw.kp_backend.taskassignment.TaskAssignmentQueryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +18,10 @@ import java.util.List;
 public class BoardController {
     private final BoardService boardService;
     private final BoardMapper boardMapper;
+    private final TaskService taskService;
+    private final TaskMapper taskMapper;
+    private final TaskAssignmentQueryService taskAssignmentQueryService;
+    private final UserMapper userMapper;
 
     @GetMapping
     public List<BoardDto> getAllBoards() {
@@ -38,5 +48,21 @@ public class BoardController {
     @PutMapping("/{boardId}")
     public void updateBoard(@PathVariable int boardId, @Valid @RequestBody BoardUpdateRequest request) {
         boardService.updateBoard(boardId, request);
+    }
+
+    @GetMapping("/{boardId}/tasks")
+    public List<TaskDto> getAllTasksByBoardId(@PathVariable int boardId) {
+        boardService.getBoardById(boardId);
+        return taskService.getAllTasksByBoardId(boardId).stream()
+                .map(taskMapper::taskToTaskDto)
+                .toList();
+    }
+
+    @GetMapping("/{boardId}/users")
+    public List<UserDto> getUsersByBoardId(@PathVariable int boardId) {
+        boardService.getBoardById(boardId);
+        return taskAssignmentQueryService.getUsersByBoardId(boardId).stream()
+                .map(userMapper::toDto)
+                .toList();
     }
 }

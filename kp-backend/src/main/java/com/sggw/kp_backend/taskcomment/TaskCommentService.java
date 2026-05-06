@@ -20,6 +20,10 @@ public class TaskCommentService {
         return taskCommentRepository.findAll();
     }
 
+    public List<TaskComment> getTaskCommentsByTaskId(int taskId) {
+        return taskCommentRepository.findByTaskId(taskId);
+    }
+
     public TaskComment createTaskComment(TaskCommentCreateRequest request) {
         TaskComment taskComment = new TaskComment(null, request.getAuthorId(),
                 LocalDate.now(), request.getCommentBody(), request.getTaskId());
