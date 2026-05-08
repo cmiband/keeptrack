@@ -1,0 +1,45 @@
+<div class="task-list-container" cdkDropListGroup>
+  @for (status of statuses; track status) {
+    <div class="status-section">
+      <div class="status-header" (click)="toggleSection(status)">
+        <i class="fas" [class.fa-caret-down]="!collapsedSections[status]" [class.fa-caret-right]="collapsedSections[status]"></i>
+        <span class="status-badge" [class.in-progress-badge]="status === 'in progress'">
+          {{ status }}
+        </span>
+      </div>
+
+      @if (!collapsedSections[status]) {
+        <div 
+          class="drop-zone"
+          cdkDropList
+          [cdkDropListData]="tasksByStatus[status]"
+          (cdkDropListDropped)="drop($event)">
+          
+          @for (task of tasksByStatus[status]; track task.id) {
+            <div class="task-card" cdkDrag>
+              <div class="status-dot" [class.dot-yellow]="status === 'to do'" [class.dot-pink]="status === 'in progress'"></div>
+              
+              <div class="task-title">{{ task.title }}</div>
+              
+              <div class="assignees">
+                @for (assignee of task.assignees; track assignee.initials) {
+                  <div class="assignee-avatar" [style.backgroundColor]="assignee.color">
+                    {{ assignee.initials }}
+                  </div>
+                }
+              </div>
+
+              <div class="due-date" [class.overdue]="task.isOverdue">
+                {{ task.dueText }}
+              </div>
+            </div>
+          }
+          
+          @if (tasksByStatus[status].length === 0) {
+            <div class="empty-drop-zone">Brak zadań w tym statusie</div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>
