@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict CCtPjTAs18ofw8U9qVexcWvgzZsy82z0cxqeVzzq4XuySFanGxeC4yKsLWwsptD
+\restrict GVhE8QdT4WKcKMmCN3tSWWrqQHZeeUhyfqT647GCpaNJhE1E8kituRJcnhScK6T
 
 -- Dumped from database version 18.3 (Debian 18.3-1.pgdg13+1)
 -- Dumped by pg_dump version 18.3 (Debian 18.3-1.pgdg13+1)
@@ -18,6 +18,57 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
+
+--
+-- Name: board_drop_dependencies(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.board_drop_dependencies() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+	DELETE FROM task WHERE boardid=OLD.boardid;
+	DELETE FROM boardassignment WHERE boardid=OLD.boardid;
+	RETURN OLD;
+END;
+$$;
+
+
+ALTER FUNCTION public.board_drop_dependencies() OWNER TO postgres;
+
+--
+-- Name: task_drop_dependencies(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.task_drop_dependencies() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+	DELETE FROM taskassignment WHERE taskid=OLD.taskid;
+	DELETE FROM taskcomment WHERE taskid=OLD.taskid;
+	RETURN OLD;
+END;
+$$;
+
+
+ALTER FUNCTION public.task_drop_dependencies() OWNER TO postgres;
+
+--
+-- Name: user_drop_dependencies(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.user_drop_dependencies() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+	DELETE FROM taskassignment WHERE userid=OLD.userid;
+	DELETE FROM boardassignment WHERE userid=OLD.userid;
+	RETURN OLD;
+END;
+$$;
+
+
+ALTER FUNCTION public.user_drop_dependencies() OWNER TO postgres;
 
 SET default_tablespace = '';
 
@@ -211,7 +262,9 @@ ALTER SEQUENCE public.taskcomment_taskcommentid_seq OWNED BY public.taskcomment.
 CREATE TABLE public.taskstatus (
     taskstatusid integer NOT NULL,
     statusname character varying(255),
-    statuslabel character varying(255)
+    statuslabel character varying(255),
+    statuscolor text,
+    boardid integer
 );
 
 
@@ -367,8 +420,29 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: board board_deletion; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER board_deletion AFTER DELETE ON public.board FOR EACH ROW EXECUTE FUNCTION public.board_drop_dependencies();
+
+
+--
+-- Name: task task_deletion; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER task_deletion AFTER DELETE ON public.task FOR EACH ROW EXECUTE FUNCTION public.task_drop_dependencies();
+
+
+--
+-- Name: users user_deletion; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER user_deletion AFTER DELETE ON public.users FOR EACH ROW EXECUTE FUNCTION public.user_drop_dependencies();
+
+
+--
 -- PostgreSQL database dump complete
 --
 
-\unrestrict CCtPjTAs18ofw8U9qVexcWvgzZsy82z0cxqeVzzq4XuySFanGxeC4yKsLWwsptD
+\unrestrict GVhE8QdT4WKcKMmCN3tSWWrqQHZeeUhyfqT647GCpaNJhE1E8kituRJcnhScK6T
 
