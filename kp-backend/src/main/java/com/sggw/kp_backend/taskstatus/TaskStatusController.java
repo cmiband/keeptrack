@@ -20,6 +20,13 @@ public class TaskStatusController {
                 .toList();
     }
 
+    @GetMapping("/board/{boardId}")
+    public List<TaskStatusDto> getTaskStatusesByBoardId(@PathVariable int boardId) {
+        return taskStatusService.getTaskStatusesByBoardId(boardId).stream()
+                .map(taskStatusMapper::toDto)
+                .toList();
+    }
+
     @GetMapping("/{id}")
     public TaskStatusDto getTaskStatusById(@PathVariable int id) {
         return taskStatusMapper.toDto(taskStatusService.getTaskStatusById(id));

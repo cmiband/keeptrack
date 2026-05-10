@@ -10,4 +10,7 @@ import lombok.NoArgsConstructor;
 public class TaskStatusUpdateRequest {
     private String statusName;
     private String statusLabel;
+    private String statusColor;
+    private Integer boardId;
+    private Integer statusOrder;
 }

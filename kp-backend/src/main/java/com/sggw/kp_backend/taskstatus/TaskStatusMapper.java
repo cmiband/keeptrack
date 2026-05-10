@@ -11,6 +11,8 @@ public class TaskStatusMapper {
                 .taskStatusId(taskStatus.getTaskStatusId())
                 .statusName(taskStatus.getStatusName())
                 .statusLabel(taskStatus.getStatusLabel())
+                .statusColor(taskStatus.getStatusColor())
+                .statusOrder(taskStatus.getStatusOrder())
                 .build();
     }
 }
