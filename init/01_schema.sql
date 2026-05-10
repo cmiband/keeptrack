@@ -265,7 +265,8 @@ CREATE TABLE public.taskstatus (
     statusname character varying(255),
     statuslabel character varying(255),
     statuscolor text,
-    boardid integer
+    boardid integer,
+    statusorder integer
 );
 
 

@@ -27,21 +27,21 @@ INSERT INTO public.boardassignment (boardid, userid) VALUES
 (3, 5);
 
 -- Task statuses (per board)
-INSERT INTO public.taskstatus (statusname, statuslabel, statuscolor, boardid) VALUES
+INSERT INTO public.taskstatus (statusname, statuslabel, statuscolor, boardid, statusorder) VALUES
 -- Frontend board
-('todo',        'To Do',       '#9CA3AF', 1),
-('in_progress', 'In Progress', '#3B82F6', 1),
-('review',      'In Review',   '#F59E0B', 1),
-('done',        'Done',        '#10B981', 1),
+('todo',        'To Do',       '#9CA3AF', 1, 1),
+('in_progress', 'In Progress', '#3B82F6', 1, 2),
+('review',      'In Review',   '#F59E0B', 1, 3),
+('done',        'Done',        '#10B981', 1, 4),
 -- Backend board
-('todo',        'To Do',       '#9CA3AF', 2),
-('in_progress', 'In Progress', '#3B82F6', 2),
-('review',      'In Review',   '#F59E0B', 2),
-('done',        'Done',        '#10B981', 2),
+('todo',        'To Do',       '#9CA3AF', 2, 1),
+('in_progress', 'In Progress', '#3B82F6', 2, 2),
+('review',      'In Review',   '#F59E0B', 2, 3),
+('done',        'Done',        '#10B981', 2, 4),
 -- DevOps board
-('todo',        'To Do',       '#9CA3AF', 3),
-('in_progress', 'In Progress', '#3B82F6', 3),
-('done',        'Done',        '#10B981', 3);
+('todo',        'To Do',       '#9CA3AF', 3, 1),
+('in_progress', 'In Progress', '#3B82F6', 3, 2),
+('done',        'Done',        '#10B981', 3, 3);
 
 -- Tasks
 INSERT INTO public.task (taskname, authorid, description, createddate, targetdate, boardid, statusid) VALUES
