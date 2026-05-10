@@ -1,12 +1,11 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <div class="container">
     <div class="box side-box">
-        @for (item of boards; track item[0]) {
+        @for (item of boards(); track item[0]) {
         <button class="board">
-            <div class="board-square" [style.backgroundColor]="item[2]">{{ item[0][0] }}</div>
+            <div class="board-square" [style.backgroundColor]="item[2]">{{ item[1][0] }}</div>
             <div class="board-info">
-                <div class="board-title">{{item[0]}}</div>
-                <div class="board-members">{{item[1]}} members</div>
+                <div class="board-title">{{item[1]}}</div>
             </div>
         </button>
         }
@@ -33,7 +32,7 @@
                 <app-task-list></app-task-list>
             }
             @if (activebutton === 'kanban') {
-                <div style="padding: 20px; color: white;">Widok Kanban w przygotowaniu...</div>
+                <app-kanban-view></app-kanban-view>
             }
         </div>
     </div>
@@ -47,18 +46,13 @@
             <i class="fas fa-gear btn-long-icon2"></i>
             <p class="btn-long-text">settings <i class="fas fa-caret-right" style="color: gray;"></i></p>
         </button>
-        <button class="btn-long" style="background-color: white; margin-bottom: 0px; color: gray;">
-            <i class="fas fa-inbox btn-long-icon2"></i>
-            <p class="btn-long-text">inbox</p>
+        <button class="btn-long" (click)="handleLogout()">
+            <p class="btn-long-text">Log out <i class="fas fa-caret-right" style="color: gray;"></i></p>
         </button>
         <button class="btn-long" style="background-color: white;margin-top: 0px; color: gray;">
             <i class="fas fa-user btn-long-icon2" style="font-size: 28px;"></i>
             <p class="btn-long-text">my tasks</p>
         </button>
-        <div style="margin: 15px; color: gray; font-weight: bold;">spaces <i class="fas fa-caret-down"
-                style="color: gray;"></i></div>
-        <div style="margin: 15px; color: gray; font-weight: bold;">channels <i class="fas fa-caret-down"
-                style="color: gray;"></i></div>
         <div style="margin: 15px;">
             <button class="direct-messages-style" (click)="toggleDirectMessages()">direct
                 messages

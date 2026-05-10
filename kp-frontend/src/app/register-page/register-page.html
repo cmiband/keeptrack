@@ -10,6 +10,12 @@
         <div class="text-input-container">
             <input class="text-input" id="username" placeholder="Username" type="text" [(ngModel)]="username">
         </div>
+        <div class="text-input-container">
+            <input class="text-input" id="fname" placeholder="First name" type="text" [(ngModel)]="firstname">
+        </div>
+        <div class="text-input-container">
+            <input class="text-input" id="lname" placeholder="Last name" type="text" [(ngModel)]="lastname">
+        </div>
         @if (errorMessage) {
             <p class="error-message" style="color: red; font-size: 14px; text-align: center; white-space: pre-line;">{{ errorMessage }}</p>
         }

@@ -1,19 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-
-interface Assignee {
-  initials: string;
-  color: string;
-}
-
-interface Task {
-  id: string;
-  title: string;
-  assignees: Assignee[];
-  dueText: string;
-  isOverdue?: boolean;
-}
+import { ListTask } from '../constants';
 
 @Component({
   selector: 'app-task-list',
@@ -28,7 +16,7 @@ export class TaskList {
     'in progress': false
   };
 
-  tasksByStatus: { [key: string]: Task[] } = {
+  tasksByStatus: { [key: string]: ListTask[] } = {
     'to do': [
       { id: '1', title: 'trochę przygrzać', assignees: [{ initials: 'WF', color: '#99E98F' }], dueText: '4 days' },
       { id: '2', title: 'melanż w resecie', assignees: [{ initials: 'IK', color: '#E99B8F' }], dueText: '6 days' },
@@ -53,7 +41,7 @@ export class TaskList {
     this.collapsedSections[status] = !this.collapsedSections[status];
   }
 
-  drop(event: CdkDragDrop<Task[]>) {
+  drop(event: CdkDragDrop<ListTask[]>) {
     if (event.previousContainer === event.container) {
      
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);

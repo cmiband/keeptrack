@@ -58,7 +58,7 @@ public class AuthService {
         var accessToken = jwtService.generateAccessToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
 
-        return new LoginResponse(accessToken, refreshToken);
+        return new LoginResponse(accessToken, refreshToken, user);
     }
 
     public Jwt refreshAccessToken(String refreshToken) {

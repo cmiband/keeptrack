@@ -1,0 +1,27 @@
+<div class="kanban-container" cdkDropListGroup>
+    @for(status of statuses; track status.name) {
+        <div class="status-container">
+            <div class="status-title"><div class="status-dot" [style.background-color]="status.color"></div>{{status.label}}</div>
+
+            <div class="tasks-list" 
+            cdkDropList 
+            [cdkDropListData]="tasksByStatus[status.name]"
+            (cdkDropListDropped)="drop($event)"
+            >
+                @for(task of tasksByStatus[status.name]; track task.id) {
+                    <div class="task-tile" cdkDrag>
+                        {{task.title}}
+                        <div class="assignees-and-due-time">
+                            <div class="assignees">
+                                @for(assignee of task.assignees; track assignee.initials) {
+                                    <div class="assignee-dot initials" [style.background-color]="assignee.color">{{assignee.initials}}</div>
+                                }
+                            </div>
+                            <span class="due-text">{{task.dueText}}</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>

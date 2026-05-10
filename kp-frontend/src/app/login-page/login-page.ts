@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../auth.service';
@@ -26,7 +26,6 @@ export class LoginPage implements AfterViewInit {
 
   handleLogin(): void {
     this.errorMessage = "";
-    console.log("Data:", this.email, this.password);
 
     const loginData = {
       email: this.email,

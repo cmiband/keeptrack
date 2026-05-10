@@ -1,26 +1,27 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
 import { Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../auth.service';
-import { TaskList} from '../task-list/task-list';
+import { TaskList } from '../task-list/task-list';
+import { KanbanView } from '../kanban-view/kanban-view';
+import { API_ENDPOINT, BoardData, DEFAULT_USER, UserData, OpenedBoard, TaskData } from '../constants';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [TaskList],
+  imports: [KanbanView, TaskList],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
-export class Home {
-
+export class Home {  
+  userData: UserData = DEFAULT_USER;
   activebutton: string = 'list';
 
-  boards: [string, number, string][] = [
-    ['projectszpont', 7, '#4CAF50'],
-    ['fdp-palindromy', 3, '#FF9800'],
-    ['splendor', 22, '#2196F3'],
-    ['sprawdko-swiecik', 4, '#8BC34A'],
-    ['keeptrack2', 4, '#E91E63']
-  ];
+  httpClient = inject(HttpClient);
+
+  boards = signal<[string, string, string][]>([]);
+  openedBoard: OpenedBoard | undefined;
 
   users: [string, string, string][] = [
     ['Barosz', 'Adamowicz', '#D37EF1'],
@@ -31,25 +32,61 @@ export class Home {
     ['Daniel', 'Gwozdecki', '#F4ED83']
   ];
 
-  currentUser = ['Adam', 'Domzalowicz'];
+  currentUser = ['', ''];
 
   directMeesageExpand: boolean = true;
-
-  ngOnInit() {
-    const token = localStorage.getItem('token');
-
-    console.log('--- SESSION TEST ---');
-    if (token) {
-      console.log('Token found:', token);
-    } else {
-      console.warn('No token in localStorage!');
-    }
-  }
 
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  logout() {
+  ngOnInit() {
+    const savedData = localStorage.getItem('user');
+    if(!savedData) {
+      return;
+    }
+
+    this.retrieveData(savedData); 
+  }
+
+  async retrieveData(savedData: string) {
+    this.userData = JSON.parse(savedData) as UserData;
+    this.fillUserInfo(this.userData);
+    console.log(this.userData);
+
+    await this.retrieveBoards(this.userData.id);
+    if(!this.boards().length) {
+      return;
+    }
+    this.openedBoard = {id: this.boards()[0][0], boardName: this.boards()[0][1]};
+
+    await this.retrieveTasks(this.openedBoard.id);
+    await this.retrieveUsers(this.openedBoard.id);
+  }
+
+  async retrieveBoards(userId: string) {
+    const boardData = await firstValueFrom(this.httpClient.get<BoardData[]>(`${API_ENDPOINT}/users/${userId}/boards`));
+
+    this.boards.set(boardData.map((board) => ([board.boardId, board.boardName, this.randomColor()])));
+  }
+
+  async retrieveTasks(boardId: string) {
+    const tasks = await firstValueFrom(this.httpClient.get<TaskData[]>(`${API_ENDPOINT}/board/${boardId}/tasks`));
+
+    console.log(tasks);
+  }
+
+  async retrieveUsers(boardId: string) {
+    const users = await firstValueFrom(this.httpClient.get<UserData[]>(`${API_ENDPOINT}/board/${boardId}/users`));
+
+    console.log(users);
+  }
+
+  fillUserInfo(userData: UserData) {
+    this.currentUser[0] = userData.firstName;
+    this.currentUser[1] = userData.lastName;
+  }
+
+  handleLogout() {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
@@ -61,4 +98,11 @@ export class Home {
   toggleDirectMessages() {
     this.directMeesageExpand = !this.directMeesageExpand;
   }
+
+  randomColor(): string {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+}
 }

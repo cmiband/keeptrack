@@ -14,6 +14,8 @@ export class RegisterPage implements AfterViewInit {
   password: string = "";
   username: string = "";
   errorMessage: string = "";
+  firstname: string = "";
+  lastname: string = "";
 
   authService = inject(AuthService);
   router = inject(Router);
@@ -30,7 +32,9 @@ export class RegisterPage implements AfterViewInit {
     const registerData = {
       username: this.username,
       password: this.password,
-      email: this.email
+      email: this.email,
+      firstName: this.firstname,
+      lastName: this.lastname
     };
 
     this.authService.register(registerData).subscribe({
