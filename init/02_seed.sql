@@ -44,14 +44,14 @@ INSERT INTO public.taskstatus (statusname, statuslabel, statuscolor, boardid) VA
 ('done',        'Done',        '#10B981', 3);
 
 -- Tasks
-INSERT INTO public.task (taskname, authorid, description, createddate, targetdate, boardid) VALUES
-('Zaprojektuj UI logowania',      1, 'Stworz ekran logowania',         '2024-03-01', '2024-03-15', 1),
-('Implementuj REST API',          2, 'Endpointy dla uzytkownikow',     '2024-03-02', '2024-03-20', 2),
-('Skonfiguruj CI/CD',             3, 'Pipeline GitHub Actions',        '2024-03-03', '2024-03-25', 3),
-('Napisz testy jednostkowe',      2, 'Pokrycie kodu testami min. 80%', '2024-03-05', '2024-03-30', 2),
-('Optymalizacja zapytan SQL',     2, 'Indeksy i query tuning',         '2024-02-20', '2024-03-01', 2),
-('Strona glowna - responsywnosc', 1, 'Mobile first design',            '2024-03-08', '2024-03-18', 1),
-('Dokumentacja API',              2, 'Swagger/OpenAPI docs',           '2024-03-10', '2024-04-01', 2);
+INSERT INTO public.task (taskname, authorid, description, createddate, targetdate, boardid, statusid) VALUES
+('Zaprojektuj UI logowania',      1, 'Stworz ekran logowania',         '2024-03-01', '2024-03-15', 1, 1),
+('Implementuj REST API',          2, 'Endpointy dla uzytkownikow',     '2024-03-02', '2024-03-20', 2, 5),
+('Skonfiguruj CI/CD',             3, 'Pipeline GitHub Actions',        '2024-03-03', '2024-03-25', 3, 9),
+('Napisz testy jednostkowe',      2, 'Pokrycie kodu testami min. 80%', '2024-03-05', '2024-03-30', 2, 5),
+('Optymalizacja zapytan SQL',     2, 'Indeksy i query tuning',         '2024-02-20', '2024-03-01', 2, 6),
+('Strona glowna - responsywnosc', 1, 'Mobile first design',            '2024-03-08', '2024-03-18', 1, 2),
+('Dokumentacja API',              2, 'Swagger/OpenAPI docs',           '2024-03-10', '2024-04-01', 2, 7);
 
 -- Task assignments
 INSERT INTO public.taskassignment (taskid, userid) VALUES
