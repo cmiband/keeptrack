@@ -155,7 +155,8 @@ CREATE TABLE public.task (
     description text,
     createddate date,
     targetdate date,
-    boardid integer
+    boardid integer,
+    statusid integer
 );
 
 
