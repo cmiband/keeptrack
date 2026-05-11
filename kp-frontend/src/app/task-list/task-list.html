@@ -1,23 +1,24 @@
 <div class="task-list-container" cdkDropListGroup>
-  @for (status of statuses; track status) {
+  @for (status of statuses(); track status.statusName) {
     <div class="status-section">
-      <div class="status-header" (click)="toggleSection(status)">
-        <i class="fas" [class.fa-caret-down]="!collapsedSections[status]" [class.fa-caret-right]="collapsedSections[status]"></i>
-        <span class="status-badge" [class.in-progress-badge]="status === 'in progress'">
-          {{ status }}
+      <div class="status-header" (click)="toggleSection(status.statusName)">
+        <i class="fas" [class.fa-caret-down]="!collapsedSections[status.statusName]" [class.fa-caret-right]="collapsedSections[status.statusName]"></i>
+        <span class="status-badge" [style.background-color]="status.statusColor">
+          {{ status.statusLabel }}
         </span>
       </div>
 
-      @if (!collapsedSections[status]) {
+      @if (!collapsedSections[status.statusName]) {
         <div 
           class="drop-zone"
+          [attr.data-status]="status.taskStatusId"
           cdkDropList
-          [cdkDropListData]="tasksByStatus[status]"
+          [cdkDropListData]="tasksByStatus()[status.statusName]"
           (cdkDropListDropped)="drop($event)">
           
-          @for (task of tasksByStatus[status]; track task.id) {
-            <div class="task-card" cdkDrag>
-              <div class="status-dot" [class.dot-yellow]="status === 'to do'" [class.dot-pink]="status === 'in progress'"></div>
+          @for (task of tasksByStatus()[status.statusName]; track task.id) {
+            <div class="task-card" cdkDrag [cdkDragData]="task">
+              <div class="status-dot" [style.background-color]="status.statusColor"></div>
               
               <div class="task-title">{{ task.title }}</div>
               
@@ -35,7 +36,7 @@
             </div>
           }
           
-          @if (tasksByStatus[status].length === 0) {
+          @if (tasksByStatus()[status.statusName].length === 0) {
             <div class="empty-drop-zone">Brak zadań w tym statusie</div>
           }
         </div>

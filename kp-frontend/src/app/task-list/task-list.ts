@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { ListTask } from '../constants';
+import { GroupedTasks, ListTask, TaskStatusData, TaskUpdateEvent } from '../constants';
 
 @Component({
   selector: 'app-task-list',
@@ -11,31 +11,19 @@ import { ListTask } from '../constants';
   styleUrl: './task-list.css'
 })
 export class TaskList {
-  collapsedSections: { [key: string]: boolean } = {
-    'to do': false,
-    'in progress': false
-  };
+  collapsedSections: { [key: string]: boolean } = {};
 
-  tasksByStatus: { [key: string]: ListTask[] } = {
-    'to do': [
-      { id: '1', title: 'trochę przygrzać', assignees: [{ initials: 'WF', color: '#99E98F' }], dueText: '4 days' },
-      { id: '2', title: 'melanż w resecie', assignees: [{ initials: 'IK', color: '#E99B8F' }], dueText: '6 days' },
-      { id: '3', title: 'speed-dating', assignees: [{ initials: 'SG', color: '#5CD27D' }], dueText: '1 day ago', isOverdue: true },
-      { id: '4', title: 'obrót', assignees: [{ initials: 'IK', color: '#E99B8F' }], dueText: '2 hours' }
-    ],
-    'in progress': [
-      { id: '5', title: 'kotłownia', assignees: [{ initials: 'IK', color: '#E99B8F' }], dueText: '1 day' },
-      {
-        id: '6', title: 'karaoke shamrock', assignees: [
-          { initials: 'IK', color: '#E99B8F' }, { initials: 'BA', color: '#D37EF1' },
-          { initials: 'IC', color: '#83E5F4' }, { initials: 'DO', color: '#F4ED83' }
-        ], dueText: '6 days'
-      }
-    ]
-  };
+  tasksChange = output<GroupedTasks>();
+  singleTaskUpdate = output<TaskUpdateEvent>();
 
+  tasksByStatus = input<GroupedTasks>({});
+  statuses = input<TaskStatusData[]>([]);
 
-  statuses = ['to do', 'in progress'];
+  ngOnInit() {
+    this.statuses().forEach((status) => {
+      this.collapsedSections[status.statusName] = false;
+    })
+  }
 
   toggleSection(status: string) {
     this.collapsedSections[status] = !this.collapsedSections[status];
@@ -54,5 +42,12 @@ export class TaskList {
         event.currentIndex,
       );
     }
+
+    const updateEvent: TaskUpdateEvent = {
+      newStatusId: event.container.element.nativeElement.dataset['status'] ?? "",
+      task: event.item.data
+    };
+    this.singleTaskUpdate.emit(updateEvent);
+    this.tasksChange.emit(this.tasksByStatus());
   }
 }

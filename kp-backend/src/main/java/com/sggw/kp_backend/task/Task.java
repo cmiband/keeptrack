@@ -36,4 +36,7 @@ public class Task {
 
     @Column(name = "boardid")
     private Integer boardId;
+
+    @Column(name = "statusid")
+    private Integer statusId;
 }
