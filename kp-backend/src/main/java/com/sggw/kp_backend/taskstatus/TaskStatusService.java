@@ -19,8 +19,19 @@ public class TaskStatusService {
         return taskStatusRepository.findAll();
     }
 
+    public List<TaskStatus> getTaskStatusesByBoardId(int boardId) {
+        return taskStatusRepository.findByBoardIdOrderByStatusOrderAsc(boardId);
+    }
+
     public TaskStatus createTaskStatus(TaskStatusCreateRequest request) {
-        TaskStatus taskStatus = new TaskStatus(null, request.getStatusName(), request.getStatusLabel());
+        TaskStatus taskStatus = new TaskStatus(
+                null,
+                request.getStatusName(),
+                request.getStatusLabel(),
+                request.getStatusColor(),
+                request.getBoardId(),
+                request.getStatusOrder()
+        );
         taskStatusRepository.save(taskStatus);
         return taskStatus;
     }
@@ -34,6 +45,15 @@ public class TaskStatusService {
         TaskStatus taskStatus = getTaskStatusById(id);
         taskStatus.setStatusName(request.getStatusName());
         taskStatus.setStatusLabel(request.getStatusLabel());
+        if (request.getStatusColor() != null) {
+            taskStatus.setStatusColor(request.getStatusColor());
+        }
+        if (request.getBoardId() != null) {
+            taskStatus.setBoardId(request.getBoardId());
+        }
+        if (request.getStatusOrder() != null) {
+            taskStatus.setStatusOrder(request.getStatusOrder());
+        }
         taskStatusRepository.save(taskStatus);
     }
 }

@@ -13,4 +13,6 @@ public class TaskStatusDto {
     private Integer taskStatusId;
     private String statusName;
     private String statusLabel;
+    private String statusColor;
+    private Integer statusOrder;
 }

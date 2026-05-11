@@ -22,4 +22,13 @@ public class TaskStatus {
 
     @Column(name = "statuslabel", length = 255)
     private String statusLabel;
+
+    @Column(name = "statuscolor", columnDefinition = "text")
+    private String statusColor;
+
+    @Column(name = "boardid")
+    private Integer boardId;
+
+    @Column(name = "statusorder")
+    private Integer statusOrder;
 }
