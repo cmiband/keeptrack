@@ -26,12 +26,10 @@ export class LoginPage implements AfterViewInit {
   handleLogin(): void {
     this.errorMessage = '';
 
-    // --- NATYCHMIASTOWA WALIDACJA FRONTENDOWA ---
     if (!this.email || !this.password) {
       this.errorMessage = 'Email and password are required.';
-      return; // Zatrzymujemy wysyłanie zapytania
+      return;
     }
-    // --------------------------------------------
 
     console.log('Data:', this.email, this.password);
 
