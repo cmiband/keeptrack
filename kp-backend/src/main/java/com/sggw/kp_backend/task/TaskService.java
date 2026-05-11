@@ -27,7 +27,7 @@ public class TaskService {
 
     public Task createTask(TaskCreateRequest request) {
         Task task = new Task(null, request.getTaskName(), request.getAuthorId(),
-                request.getDescription(), LocalDate.now(),request.getTargetDate(), request.getBoardId());
+                request.getDescription(), LocalDate.now(),request.getTargetDate(), request.getBoardId(), request.getStatusId());
         taskRepository.save(task);
         return task;
     }
@@ -43,6 +43,7 @@ public class TaskService {
         task.setDescription(request.getDescription());
         task.setTargetDate(request.getTargetDate());
         task.setBoardId(request.getBoardId());
+        task.setStatusId(request.getStatusId());
         taskRepository.save(task);
     }
 

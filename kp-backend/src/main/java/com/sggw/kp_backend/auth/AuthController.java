@@ -44,6 +44,7 @@ public class AuthController {
 
         var jwtResponse = new JwtResponse();
         jwtResponse.setToken(loginResult.getAccessToken().toString());
+        jwtResponse.setUserData(new UserMapper().toDto(loginResult.getUserData()));
         return jwtResponse;
     }
 

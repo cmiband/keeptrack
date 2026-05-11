@@ -25,6 +25,8 @@ public class UserService {
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setEmail(request.getEmail());
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
         user.setCreatedDate(LocalDate.now());
 
         return userRepository.save(user);

@@ -1,33 +1,20 @@
 import { Component, input, output } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { GroupedTasks, ListTask, TaskStatusData, TaskUpdateEvent } from '../constants';
+import { ListTask, TaskStatusData, GroupedTasks, TaskUpdateEvent } from '../constants';
 
 @Component({
-  selector: 'app-task-list',
-  standalone: true,
-  imports: [CommonModule, DragDropModule],
-  templateUrl: './task-list.html',
-  styleUrl: './task-list.css'
+  selector: 'app-kanban-view',
+  imports: [DragDropModule],
+  templateUrl: './kanban-view.html',
+  styleUrl: './kanban-view.css',
 })
-export class TaskList {
-  collapsedSections: { [key: string]: boolean } = {};
+export class KanbanView {
 
   tasksChange = output<GroupedTasks>();
   singleTaskUpdate = output<TaskUpdateEvent>();
 
   tasksByStatus = input<GroupedTasks>({});
   statuses = input<TaskStatusData[]>([]);
-
-  ngOnInit() {
-    this.statuses().forEach((status) => {
-      this.collapsedSections[status.statusName] = false;
-    })
-  }
-
-  toggleSection(status: string) {
-    this.collapsedSections[status] = !this.collapsedSections[status];
-  }
 
   drop(event: CdkDragDrop<ListTask[]>) {
     if (event.previousContainer === event.container) {

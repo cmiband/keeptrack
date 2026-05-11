@@ -21,4 +21,10 @@ public class RegisterRequest {
     @Pattern(regexp = "^[\\w.+-]+@[\\w.-]+\\.[a-zA-Z]{2,}$", message = "Email must be valid")
     @Size(max = 255, message = "Email is too long")
     private String email;
+
+    @NotBlank(message = "First name is required")
+    private String firstName;
+
+    @NotBlank(message = "Last name is required")
+    private String lastName;
 }

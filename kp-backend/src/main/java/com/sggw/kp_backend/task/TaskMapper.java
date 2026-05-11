@@ -15,6 +15,7 @@ public class TaskMapper {
                 .createdDate(task.getCreatedDate())
                 .targetDate(task.getTargetDate())
                 .boardId(task.getBoardId())
+                .statusId(task.getStatusId())
                 .build();
     }
 }

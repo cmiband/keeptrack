@@ -20,4 +20,5 @@ public class TaskDto {
     private LocalDate createdDate;
     private LocalDate targetDate;
     private Integer boardId;
+    private Integer statusId;
 }

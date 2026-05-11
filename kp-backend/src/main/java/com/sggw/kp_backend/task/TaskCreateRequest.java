@@ -15,4 +15,5 @@ public class TaskCreateRequest {
     private String description;
     private LocalDate targetDate;
     private Integer boardId;
+    private Integer statusId;
 }
