@@ -1,8 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, AfterViewInit } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../auth.service';
-import { inject, AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'app-login-page',
@@ -11,9 +10,9 @@ import { inject, AfterViewInit } from '@angular/core';
   styleUrl: './login-page.css',
 })
 export class LoginPage implements AfterViewInit {
-  email: string = "";
-  password: string = "";
-  errorMessage: string = "";
+  email: string = '';
+  password: string = '';
+  errorMessage: string = '';
 
   authService = inject(AuthService);
   router = inject(Router);
@@ -25,11 +24,18 @@ export class LoginPage implements AfterViewInit {
   }
 
   handleLogin(): void {
-    this.errorMessage = "";
+    this.errorMessage = '';
+
+    if (!this.email || !this.password) {
+      this.errorMessage = 'Email and password are required.';
+      return;
+    }
+
+    console.log('Data:', this.email, this.password);
 
     const loginData = {
       email: this.email,
-      password: this.password
+      password: this.password,
     };
 
     this.authService.login(loginData).subscribe({
@@ -42,7 +48,7 @@ export class LoginPage implements AfterViewInit {
         } else {
           this.errorMessage = 'Login error';
         }
-      }
+      },
     });
   }
 }
