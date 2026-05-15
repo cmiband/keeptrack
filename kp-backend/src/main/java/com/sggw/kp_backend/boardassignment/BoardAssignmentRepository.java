@@ -8,4 +8,5 @@ import java.util.List;
 @Repository
 public interface BoardAssignmentRepository extends JpaRepository<BoardAssignment, Integer> {
     List<BoardAssignment> findByUserId(Integer userId);
+    void deleteByBoardIdAndUserId(Integer boardId, Integer userId);
 }

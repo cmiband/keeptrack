@@ -2,6 +2,7 @@ package com.sggw.kp_backend.boardassignment;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -28,6 +29,11 @@ public class BoardAssignmentService {
     public void deleteBoardAssignment(int id) {
         BoardAssignment boardAssignment = getBoardAssignmentById(id);
         boardAssignmentRepository.delete(boardAssignment);
+    }
+
+    @Transactional
+    public void deleteBoardAssignmentByBoardAndUser(int boardId, int userId) {
+        boardAssignmentRepository.deleteByBoardIdAndUserId(boardId, userId);
     }
 
     public void updateBoardAssignment(int id, BoardAssignmentUpdateRequest request) {

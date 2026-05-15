@@ -215,6 +215,12 @@ export class Home {
     this.updateTask(taskData);
   }
 
+  async removeUserFromBoard(userId: string) {
+    if (!this.openedBoard) return;
+    await firstValueFrom(this.httpClient.delete(`${API_ENDPOINT}/board-assignment/board/${this.openedBoard.id}/user/${userId}`));
+    this.users.set(this.users().filter(u => u.id !== userId));
+  }
+
   toggleDirectMessages() {
     this.directMeesageExpand = !this.directMeesageExpand;
   }
