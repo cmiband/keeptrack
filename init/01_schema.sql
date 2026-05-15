@@ -387,8 +387,7 @@ CREATE TABLE public.users (
     firstname character varying(50),
     email character varying(255),
     username character varying(255),
-    createddate date,
-    password character varying(255)
+    createddate date
 );
 
 
