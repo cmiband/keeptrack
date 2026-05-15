@@ -1,12 +1,13 @@
 import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { GroupedTasks, ListTask, TaskStatusData, TaskUpdateEvent } from '../constants';
+import { Assignee, GroupedTasks, ListTask, OpenedBoard, TaskStatusData, TaskUpdateEvent } from '../constants';
+import { TaskInfo } from '../task-info/task-info';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
-  imports: [CommonModule, DragDropModule],
+  imports: [CommonModule, DragDropModule, TaskInfo],
   templateUrl: './task-list.html',
   styleUrl: './task-list.css'
 })
@@ -18,6 +19,13 @@ export class TaskList {
 
   tasksByStatus = input<GroupedTasks>({});
   statuses = input<TaskStatusData[]>([]);
+
+  currentBoard = input<OpenedBoard | undefined>(undefined);
+
+  taskToShowInfo: string | null = null;
+  taskToShowStatusColor: string | null = null;
+  taskToShowStatusLabel: string | null = null;
+  taskToShowAssignees: Assignee[] | null = null;
 
   ngOnInit() {
     this.statuses().forEach((status) => {
@@ -49,5 +57,19 @@ export class TaskList {
     };
     this.singleTaskUpdate.emit(updateEvent);
     this.tasksChange.emit(this.tasksByStatus());
+  }
+
+  openTaskInfo(id: string, statusColor: string, statusLabel: string, assignees: Assignee[]) {
+    this.taskToShowInfo = id;
+    this.taskToShowStatusColor = statusColor;
+    this.taskToShowStatusLabel = statusLabel;
+    this.taskToShowAssignees = assignees;
+  }
+
+  closeTaskInfo() {
+    this.taskToShowInfo = null;
+    this.taskToShowStatusColor = null;
+    this.taskToShowStatusLabel = null;
+    this.taskToShowAssignees = null;
   }
 }
