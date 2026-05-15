@@ -14,7 +14,7 @@ import { API_ENDPOINT, BoardData, DEFAULT_USER, UserData, OpenedBoard, TaskData,
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
-export class Home {  
+export class Home {
   userData: UserData = DEFAULT_USER;
   activebutton: string = 'list';
 
@@ -36,6 +36,8 @@ export class Home {
   directMeesageExpand: boolean = true;
   dataLoaded = signal<boolean>(false);
 
+  notification = signal<string | null>(null);
+
   private authService = inject(AuthService);
   private router = inject(Router);
 
@@ -45,7 +47,7 @@ export class Home {
       return;
     }
 
-    this.retrieveData(savedData); 
+    this.retrieveData(savedData);
   }
 
   async retrieveData(savedData: string) {
@@ -166,10 +168,10 @@ export class Home {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const target = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    
+
     const diffMs = target.getTime() - today.getTime();
     const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    
+
     if (days === 0) return "0 days";
     if (days === 1) return "1 day";
     if (days === -1) return "1 day ago";
@@ -217,8 +219,14 @@ export class Home {
 
   async removeUserFromBoard(userId: string) {
     if (!this.openedBoard) return;
+    const user = this.users().find(u => u.id === userId);
     await firstValueFrom(this.httpClient.delete(`${API_ENDPOINT}/board-assignment/board/${this.openedBoard.id}/user/${userId}`));
     this.users.set(this.users().filter(u => u.id !== userId));
+
+    if (user) {
+      this.notification.set(`${user.firstName} ${user.lastName} was removed from ${this.openedBoard.boardName}`);
+      setTimeout(() => this.notification.set(null), 3000);
+    }
   }
 
   toggleDirectMessages() {
