@@ -24,6 +24,7 @@ export class Home {
   statuses = signal<TaskStatusData[]>([]);
 
   boards = signal<[string, string, string][]>([]);
+  rawBoards: BoardData[] = [];
   tasks: TaskData[] = [];
   usersByTasks: UsersWithTaskId[] = [];
   openedBoard: OpenedBoard | undefined;
@@ -70,7 +71,14 @@ export class Home {
   async retrieveBoards(userId: string) {
     const boardData = await firstValueFrom(this.httpClient.get<BoardData[]>(`${API_ENDPOINT}/users/${userId}/boards`));
 
+    this.rawBoards = boardData;
     this.boards.set(boardData.map((board) => ([board.boardId, board.boardName, this.randomColor()])));
+  }
+
+  get isCurrentUserBoardAuthor(): boolean {
+    if (!this.openedBoard || !this.rawBoards.length) return false;
+    const board = this.rawBoards.find(b => b.boardId === this.openedBoard!.id);
+    return board?.authorId === this.userData.id;
   }
 
   async retrieveTasks(boardId: string) {
