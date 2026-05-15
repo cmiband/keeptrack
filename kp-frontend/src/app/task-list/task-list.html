@@ -17,7 +17,7 @@
           (cdkDropListDropped)="drop($event)">
           
           @for (task of tasksByStatus()[status.statusName]; track task.id) {
-            <div class="task-card" cdkDrag [cdkDragData]="task">
+            <div class="task-card" cdkDrag [cdkDragData]="task" (click)="openTaskInfo(task.id, status.statusColor, status.statusLabel,task.assignees)">
               <div class="status-dot" [style.background-color]="status.statusColor"></div>
               
               <div class="task-title">{{ task.title }}</div>
@@ -44,3 +44,11 @@
     </div>
   }
 </div>
+@if(taskToShowInfo !== null) {
+  <app-task-info [taskID]="taskToShowInfo" 
+                [statusColor]="taskToShowStatusColor" 
+                [statusLabel]="taskToShowStatusLabel" 
+                [boardName]="currentBoard()?.boardName"
+                [assignees]="taskToShowAssignees"
+                (close)="closeTaskInfo()"></app-task-info>
+}

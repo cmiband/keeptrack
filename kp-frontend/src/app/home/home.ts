@@ -23,6 +23,8 @@ export class Home {
   tasksByStatus = signal<GroupedTasks>({});
   statuses = signal<TaskStatusData[]>([]);
 
+  currentBoard = signal<OpenedBoard | undefined>(undefined);
+
   boards = signal<[string, string, string][]>([]);
   tasks: TaskData[] = [];
   usersByTasks: UsersWithTaskId[] = [];
@@ -56,6 +58,7 @@ export class Home {
       return;
     }
     this.openedBoard = {id: this.boards()[0][0], boardName: this.boards()[0][1]};
+    this.currentBoard.set(this.openedBoard);
 
     await this.retrieveTasks(this.openedBoard.id);
     await this.retrieveUsers(this.openedBoard.id);
