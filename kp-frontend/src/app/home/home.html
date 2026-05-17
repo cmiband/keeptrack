@@ -25,6 +25,9 @@
             <button class="btn btn-filter">
                 <i class="fas fa-caret-down"></i> filter
             </button>
+            <button class="btn btn-list-kanban" (click)="openAddTaskMenu()">
+                <i class="fa-solid fa-plus"></i> new task
+            </button>
         </div>
         
         <div class="box middle-box" style="background-color: transparent; box-shadow: none;">
@@ -63,14 +66,19 @@
             </button>
             @if (directMeesageExpand) {
             @for (item of users(); track item.id) {
-                <div style="display: flex; align-items: center; margin-top: 4px;">
-                    <div class="btn-long-icon direct-messages-user-avatar" [style.backgroundColor]="item.color">
-                        {{item.firstName[0]}}{{item.lastName[0]}}
+                @if (userData.id !== item.id) {
+                    <div style="display: flex; align-items: center; margin-top: 4px;">
+                        <div class="btn-long-icon direct-messages-user-avatar" [style.backgroundColor]="item.color">
+                            {{item.firstName[0]}}{{item.lastName[0]}}
+                        </div>
+                        <button class="direct-messages-user">
+                            {{item.firstName}} {{item.lastName}}</button>
                     </div>
-                    <button class="direct-messages-user">
-                        {{item.firstName}} {{item.lastName}}</button>
-                </div>
+                }
             }}
         </div>
     </div>
 </div>
+@if(isAddTaskMenuOpen) {
+    <app-add-task (taskAdded)="ngOnInit()" [statuses]="statuses()" [boardID]="openedBoard?.id" [users]="users()" [currentUser]="userData" (close)="closeAddTaskMenu()"></app-add-task>
+}
