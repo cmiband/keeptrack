@@ -39,6 +39,17 @@ export interface TaskStatusData {
     statusOrder: number
 }
 
+export interface TaskAssignment {
+    taskId: number,
+    userId: number
+}
+
+export interface TaskAssignmentResponse {
+    taskAssignmentId: string,
+    taskId: string,
+    userId: string
+}
+
 export const DEFAULT_USER: UserData = {
   createdDate: "",
   email: "",
