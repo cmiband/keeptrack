@@ -1,4 +1,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+@if (notification()) {
+<div class="notification">{{ notification() }}</div>
+}
 <div class="container">
     <div class="box side-box">
         @for (item of boards(); track item[0]) {
@@ -74,6 +77,12 @@
                         <button class="direct-messages-user">
                             {{item.firstName}} {{item.lastName}}</button>
                     </div>
+                    <button class="direct-messages-user">
+                        {{item.firstName}} {{item.lastName}}</button>
+                    @if (isCurrentUserBoardAuthor) {
+                    <img src="trash.svg" style="width: 16px; height: 16px; cursor: pointer; margin-left: 8px;" (click)="removeUserFromBoard(item.id)" />
+                    }
+                </div>
                 }
             }}
         </div>

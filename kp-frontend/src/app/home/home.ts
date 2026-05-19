@@ -15,7 +15,7 @@ import { AddTask } from '../add-task/add-task';
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
-export class Home {  
+export class Home {
   userData: UserData = DEFAULT_USER;
   activebutton: string = 'list';
 
@@ -27,6 +27,7 @@ export class Home {
   currentBoard = signal<OpenedBoard | undefined>(undefined);
 
   boards = signal<[string, string, string][]>([]);
+  rawBoards: BoardData[] = [];
   tasks: TaskData[] = [];
   usersByTasks: UsersWithTaskId[] = [];
   openedBoard: OpenedBoard | undefined;
@@ -38,6 +39,7 @@ export class Home {
   directMeesageExpand: boolean = true;
   dataLoaded = signal<boolean>(false);
 
+  notification = signal<string | null>(null);
   isAddTaskMenuOpen: boolean = false;
   constructor(
     private cdr: ChangeDetectorRef
@@ -52,7 +54,7 @@ export class Home {
       return;
     }
 
-    this.retrieveData(savedData); 
+    this.retrieveData(savedData);
   }
 
   async retrieveData(savedData: string) {
@@ -79,7 +81,14 @@ export class Home {
   async retrieveBoards(userId: string) {
     const boardData = await firstValueFrom(this.httpClient.get<BoardData[]>(`${API_ENDPOINT}/users/${userId}/boards`));
 
+    this.rawBoards = boardData;
     this.boards.set(boardData.map((board) => ([board.boardId, board.boardName, this.randomColor()])));
+  }
+
+  get isCurrentUserBoardAuthor(): boolean {
+    if (!this.openedBoard || !this.rawBoards.length) return false;
+    const board = this.rawBoards.find(b => b.boardId === this.openedBoard!.id);
+    return board?.authorId === this.userData.id;
   }
 
   async retrieveTasks(boardId: string) {
@@ -167,10 +176,10 @@ export class Home {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const target = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    
+
     const diffMs = target.getTime() - today.getTime();
     const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    
+
     if (days === 0) return "0 days";
     if (days === 1) return "1 day";
     if (days === -1) return "1 day ago";
@@ -214,6 +223,18 @@ export class Home {
 
     taskData.statusId = taskEvent.newStatusId;
     this.updateTask(taskData);
+  }
+
+  async removeUserFromBoard(userId: string) {
+    if (!this.openedBoard) return;
+    const user = this.users().find(u => u.id === userId);
+    await firstValueFrom(this.httpClient.delete(`${API_ENDPOINT}/board-assignment/board/${this.openedBoard.id}/user/${userId}`));
+    this.users.set(this.users().filter(u => u.id !== userId));
+
+    if (user) {
+      this.notification.set(`${user.firstName} ${user.lastName} was removed from ${this.openedBoard.boardName}`);
+      setTimeout(() => this.notification.set(null), 3000);
+    }
   }
 
   toggleDirectMessages() {

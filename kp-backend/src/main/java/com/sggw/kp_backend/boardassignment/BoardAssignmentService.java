@@ -2,7 +2,6 @@ package com.sggw.kp_backend.boardassignment;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -27,6 +26,12 @@ public class BoardAssignmentService {
 
     public void deleteBoardAssignment(int id) {
         BoardAssignment boardAssignment = getBoardAssignmentById(id);
+        boardAssignmentRepository.delete(boardAssignment);
+    }
+
+    public void deleteBoardAssignmentByBoardAndUser(int boardId, int userId) {
+        BoardAssignment boardAssignment = boardAssignmentRepository.findByBoardIdAndUserId(boardId, userId)
+                .orElseThrow(() -> new RuntimeException("BoardAssignment not found for boardId: " + boardId + " and userId: " + userId));
         boardAssignmentRepository.delete(boardAssignment);
     }
 

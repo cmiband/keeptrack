@@ -1,8 +1,8 @@
---
+﻿--
 -- PostgreSQL database dump
 --
 
-\restrict GVhE8QdT4WKcKMmCN3tSWWrqQHZeeUhyfqT647GCpaNJhE1E8kituRJcnhScK6T
+\restrict jQ0J5ig5KIPa6DmuITKdRNSMVScse6H0tvHg0n4dxAHNzabEGCXewjHXMO1xirb
 
 -- Dumped from database version 18.3 (Debian 18.3-1.pgdg13+1)
 -- Dumped by pg_dump version 18.3 (Debian 18.3-1.pgdg13+1)
@@ -20,21 +20,72 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Name: board_assignment_user_drop(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.board_assignment_user_drop() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    DELETE FROM taskassignment ta
+	USING task t
+	WHERE ta.taskid = t.taskid
+  	AND ta.userid = OLD.userid
+  	AND t.boardid = OLD.boardid;
+    RETURN OLD;
+END;
+$$;
+
+
+ALTER FUNCTION public.board_assignment_user_drop() OWNER TO postgres;
+
+--
 -- Name: board_drop_dependencies(); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
 CREATE FUNCTION public.board_drop_dependencies() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
+
 BEGIN
-	DELETE FROM task WHERE boardid=OLD.boardid;
-	DELETE FROM boardassignment WHERE boardid=OLD.boardid;
-	RETURN OLD;
+
+DELETE FROM task WHERE boardid=OLD.boardid;
+
+DELETE FROM boardassignment WHERE boardid=OLD.boardid;
+
+RETURN OLD;
+
 END;
+
 $$;
 
 
 ALTER FUNCTION public.board_drop_dependencies() OWNER TO postgres;
+
+--
+-- Name: board_insertion(); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.board_insertion() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+	INSERT INTO taskstatus(statusname, statuslabel, statuscolor, boardid)
+	VALUES ('TODO', 'TODO', '#dbdbdb', NEW.boardid);
+	
+	INSERT INTO taskstatus(statusname, statuslabel, statuscolor, boardid)
+	VALUES ('In_Progress', 'In progress', '#ff4f8d', NEW.boardid);
+	
+	INSERT INTO taskstatus(statusname, statuslabel, statuscolor, boardid)
+	VALUES ('Done', 'Done', '#0cfa50', NEW.boardid);
+	
+	RETURN NEW;
+	
+END;
+$$;
+
+
+ALTER FUNCTION public.board_insertion() OWNER TO postgres;
 
 --
 -- Name: task_drop_dependencies(); Type: FUNCTION; Schema: public; Owner: postgres
@@ -43,11 +94,17 @@ ALTER FUNCTION public.board_drop_dependencies() OWNER TO postgres;
 CREATE FUNCTION public.task_drop_dependencies() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
+
 BEGIN
-	DELETE FROM taskassignment WHERE taskid=OLD.taskid;
-	DELETE FROM taskcomment WHERE taskid=OLD.taskid;
-	RETURN OLD;
+
+DELETE FROM taskassignment WHERE taskid=OLD.taskid;
+
+DELETE FROM taskcomment WHERE taskid=OLD.taskid;
+
+RETURN OLD;
+
 END;
+
 $$;
 
 
@@ -60,11 +117,17 @@ ALTER FUNCTION public.task_drop_dependencies() OWNER TO postgres;
 CREATE FUNCTION public.user_drop_dependencies() RETURNS trigger
     LANGUAGE plpgsql
     AS $$
+
 BEGIN
-	DELETE FROM taskassignment WHERE userid=OLD.userid;
-	DELETE FROM boardassignment WHERE userid=OLD.userid;
-	RETURN OLD;
+
+DELETE FROM taskassignment WHERE userid=OLD.userid;
+
+DELETE FROM boardassignment WHERE userid=OLD.userid;
+
+RETURN OLD;
+
 END;
+
 $$;
 
 
@@ -143,6 +206,26 @@ ALTER SEQUENCE public.boardassignment_boardassignmentid_seq OWNER TO postgres;
 
 ALTER SEQUENCE public.boardassignment_boardassignmentid_seq OWNED BY public.boardassignment.boardassignmentid;
 
+
+--
+-- Name: flyway_schema_history; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.flyway_schema_history (
+    installed_rank integer NOT NULL,
+    version character varying(50),
+    description character varying(200) NOT NULL,
+    type character varying(20) NOT NULL,
+    script character varying(1000) NOT NULL,
+    checksum integer,
+    installed_by character varying(100) NOT NULL,
+    installed_on timestamp without time zone DEFAULT now() NOT NULL,
+    execution_time integer NOT NULL,
+    success boolean NOT NULL
+);
+
+
+ALTER TABLE public.flyway_schema_history OWNER TO postgres;
 
 --
 -- Name: task; Type: TABLE; Schema: public; Owner: postgres
@@ -390,6 +473,14 @@ ALTER TABLE ONLY public.board
 
 
 --
+-- Name: flyway_schema_history flyway_schema_history_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.flyway_schema_history
+    ADD CONSTRAINT flyway_schema_history_pk PRIMARY KEY (installed_rank);
+
+
+--
 -- Name: task task_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -422,10 +513,31 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: flyway_schema_history_s_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX flyway_schema_history_s_idx ON public.flyway_schema_history USING btree (success);
+
+
+--
+-- Name: boardassignment board_assignment_drop; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER board_assignment_drop AFTER DELETE ON public.boardassignment FOR EACH ROW EXECUTE FUNCTION public.board_assignment_user_drop();
+
+
+--
 -- Name: board board_deletion; Type: TRIGGER; Schema: public; Owner: postgres
 --
 
 CREATE TRIGGER board_deletion AFTER DELETE ON public.board FOR EACH ROW EXECUTE FUNCTION public.board_drop_dependencies();
+
+
+--
+-- Name: board board_insert; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER board_insert AFTER INSERT ON public.board FOR EACH ROW EXECUTE FUNCTION public.board_insertion();
 
 
 --
@@ -446,5 +558,5 @@ CREATE TRIGGER user_deletion AFTER DELETE ON public.users FOR EACH ROW EXECUTE F
 -- PostgreSQL database dump complete
 --
 
-\unrestrict GVhE8QdT4WKcKMmCN3tSWWrqQHZeeUhyfqT647GCpaNJhE1E8kituRJcnhScK6T
+\unrestrict jQ0J5ig5KIPa6DmuITKdRNSMVScse6H0tvHg0n4dxAHNzabEGCXewjHXMO1xirb
 

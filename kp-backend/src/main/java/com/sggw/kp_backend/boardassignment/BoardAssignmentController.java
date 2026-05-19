@@ -35,6 +35,11 @@ public class BoardAssignmentController {
         boardAssignmentService.deleteBoardAssignment(id);
     }
 
+    @DeleteMapping("/board/{boardId}/user/{userId}")
+    public void deleteBoardAssignmentByBoardAndUser(@PathVariable int boardId, @PathVariable int userId) {
+        boardAssignmentService.deleteBoardAssignmentByBoardAndUser(boardId, userId);
+    }
+
     @PutMapping("/{id}")
     public void updateBoardAssignment(@PathVariable int id, @Valid @RequestBody BoardAssignmentUpdateRequest request) {
         boardAssignmentService.updateBoardAssignment(id, request);
