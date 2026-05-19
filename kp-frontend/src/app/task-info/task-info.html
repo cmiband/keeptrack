@@ -1,0 +1,55 @@
+<div class="modal-overlay">
+  <div class="modal-content">
+
+    <div class="modal-header">
+      <div class="breadcrumbs"><b>{{boardName}}</b></div>
+      <button class="close-btn" (click)="onClose()">✕</button>
+    </div>
+
+    <div class="modal-body">
+
+      <div class="left-column custom-scroll">
+        <span class="status-badge" [style.background-color]="statusColor">
+          {{ statusLabel }}
+        </span>
+
+        <h1 class="task-title">{{ task?.taskName }}</h1>
+
+        <div class="meta-section">
+          <div class="meta-row">
+            <span class="meta-label">assignees:</span>
+            @for (assignee of assignees; track assignee.initials) {
+            <div class="assignee-avatar" [style.backgroundColor]="assignee.color">
+              {{ assignee.initials }}
+            </div>
+            }
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">due date:</span>
+            <span class="meta-value">{{formattedDate}}</span>
+          </div>
+        </div>
+
+        <div class="description-section">
+          <p class="desc-label">description:</p>
+          <p class="desc-text">{{task?.description}}</p>
+        </div>
+      </div>
+
+      <div class="right-column">
+        <div class="activity-title">activity</div>
+
+        <div class="activity-content custom-scroll">
+          <!-- tutaj komenatrze -->
+        </div>
+
+        <div class="add-comment-wrapper">
+          <div class="add-comment-input-box">
+            <input type="text" placeholder="add comment..." class="comment-input">
+            <button class="add-btn"><i class="fa-solid fa-plus"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

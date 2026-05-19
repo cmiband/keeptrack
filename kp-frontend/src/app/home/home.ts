@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
@@ -6,11 +6,12 @@ import { AuthService } from '../auth.service';
 import { TaskList } from '../task-list/task-list';
 import { KanbanView } from '../kanban-view/kanban-view';
 import { API_ENDPOINT, BoardData, DEFAULT_USER, UserData, OpenedBoard, TaskData, TaskStatusData, UsersWithTaskId, GroupedTasks, ListTask, Assignee, ListUser, TaskUpdateEvent } from '../constants';
+import { AddTask } from '../add-task/add-task';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [KanbanView, TaskList],
+  imports: [KanbanView, TaskList, AddTask],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -22,6 +23,8 @@ export class Home {
 
   tasksByStatus = signal<GroupedTasks>({});
   statuses = signal<TaskStatusData[]>([]);
+
+  currentBoard = signal<OpenedBoard | undefined>(undefined);
 
   boards = signal<[string, string, string][]>([]);
   rawBoards: BoardData[] = [];
@@ -37,6 +40,10 @@ export class Home {
   dataLoaded = signal<boolean>(false);
 
   notification = signal<string | null>(null);
+  isAddTaskMenuOpen: boolean = false;
+  constructor(
+    private cdr: ChangeDetectorRef
+  ) {}
 
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -59,6 +66,7 @@ export class Home {
       return;
     }
     this.openedBoard = {id: this.boards()[0][0], boardName: this.boards()[0][1]};
+    this.currentBoard.set(this.openedBoard);
 
     await this.retrieveTasks(this.openedBoard.id);
     await this.retrieveUsers(this.openedBoard.id);
@@ -238,5 +246,13 @@ export class Home {
     const g = Math.floor(Math.random() * 256);
     const b = Math.floor(Math.random() * 256);
     return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
-}
+  }
+
+  openAddTaskMenu() {
+    this.isAddTaskMenuOpen = true;
+  }
+
+  closeAddTaskMenu() {
+    this.isAddTaskMenuOpen = false;
+  }
 }

@@ -1,0 +1,72 @@
+<div class="modal-overlay">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <div class="breadcrumbs"><b>add task</b></div>
+            <button class="close-btn" (click)="onClose()">✕</button>
+        </div>
+
+        <div class="modal-body">
+            <div class="add-task-container custom-scroll">
+
+                <div class="form-section">
+                    <label class="section-label">task name:</label>
+                    <input type="text" class="custom-input" placeholder="name..." #nameInput>
+                </div>
+
+                <div class="form-section">
+                    <label class="section-label">due date:</label>
+                    <div class="date-time-row">
+                        <div class="input-wrapper">
+                            <input type="date" class="custom-input" #dateInput [min]="todayDate" max="9999-12-12">
+                            <span class="input-icon"><i class="fa-solid fa-calendar"></i></span>
+                        </div>
+                        <div class="input-wrapper">
+                            <input type="text" class="custom-input time-input" placeholder="00:00" #timeInput>
+                            <span class="input-icon"><i class="fa-solid fa-clock"></i></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <label class="section-label">assign users:</label>
+                    <div class="users-box custom-scroll">
+                        <!-- <label class="user-chip">
+                            <div class="assignee-avatar" style="background-color: #5CD27D;">
+                                {{ currentUser?.firstName?.[0] }}{{currentUser?.lastName?.[0]}}
+                            </div>
+                            <span class="user-name">{{currentUser?.firstName}} {{currentUser?.lastName}}</span>
+                            <input type="checkbox" class="user-checkbox" (change)="addRemoveUser(currentUser?.id)">
+                        </label> -->
+                        @for(user of users; track user.id) {
+                        <label class="user-chip">
+                            <div class="assignee-avatar" [style.backgroundColor]="user.color">
+                                {{ user.firstName[0] }}{{user.lastName[0]}}
+                            </div>
+                            <span class="user-name">{{user.firstName}} {{user.lastName}}</span>
+                            <input type="checkbox" class="user-checkbox" (change)="addRemoveUser(user.id)">
+                        </label>
+                        }
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <label class="section-label">description:</label>
+                    <textarea class="custom-textarea custom-scroll" placeholder="type description here..."
+                        #descriptionInput></textarea>
+                </div>
+
+                @if (validationError) {
+                    <div class="error-message">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        {{ validationError }}
+                    </div>
+                }
+
+                <button (click)="createTask(nameInput.value,descriptionInput.value,timeInput.value,dateInput.value)"
+                    class="submit-btn">add task <span class="check-icon"><i
+                            class="fa-solid fa-check"></i></span></button>
+            </div>
+        </div>
+    </div>
+</div>
