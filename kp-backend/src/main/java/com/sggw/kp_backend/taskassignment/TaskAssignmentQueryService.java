@@ -25,19 +25,6 @@ public class TaskAssignmentQueryService {
         return getUsersFromAssignments(assignments);
     }
 
-    public List<User> getUsersByBoardId(int boardId) {
-        var taskIds = taskRepository.findByBoardId(boardId).stream()
-                .map(task -> task.getTaskId())
-                .toList();
-
-        if (taskIds.isEmpty()) {
-            return List.of();
-        }
-
-        List<TaskAssignment> assignments = taskAssignmentRepository.findByTaskIdIn(taskIds);
-        return getUsersFromAssignments(assignments);
-    }
-
     public Map<Integer, List<User>> getUsersByTaskIds(List<Integer> taskIds) {
         if (taskIds == null || taskIds.isEmpty()) {
             return Map.of();
