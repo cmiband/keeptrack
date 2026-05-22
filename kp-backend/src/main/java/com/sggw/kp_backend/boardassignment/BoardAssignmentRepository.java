@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface BoardAssignmentRepository extends JpaRepository<BoardAssignment, Integer> {
     List<BoardAssignment> findByUserId(Integer userId);
     Optional<BoardAssignment> findByBoardIdAndUserId(Integer boardId, Integer userId);
+    List<BoardAssignment> findByBoardId(Integer boardId);
 }

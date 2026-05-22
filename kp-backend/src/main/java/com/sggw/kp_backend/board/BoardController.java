@@ -2,10 +2,10 @@ package com.sggw.kp_backend.board;
 
 import com.sggw.kp_backend.auth.UserDto;
 import com.sggw.kp_backend.auth.UserMapper;
+import com.sggw.kp_backend.boardassignment.BoardAssignmentService;
 import com.sggw.kp_backend.task.TaskDto;
 import com.sggw.kp_backend.task.TaskMapper;
 import com.sggw.kp_backend.task.TaskService;
-import com.sggw.kp_backend.taskassignment.TaskAssignmentQueryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +18,9 @@ import java.util.List;
 public class BoardController {
     private final BoardService boardService;
     private final BoardMapper boardMapper;
+    private final BoardAssignmentService boardAssignmentService;
     private final TaskService taskService;
     private final TaskMapper taskMapper;
-    private final TaskAssignmentQueryService taskAssignmentQueryService;
     private final UserMapper userMapper;
 
     @GetMapping
@@ -61,7 +61,7 @@ public class BoardController {
     @GetMapping("/{boardId}/users")
     public List<UserDto> getUsersByBoardId(@PathVariable int boardId) {
         boardService.getBoardById(boardId);
-        return taskAssignmentQueryService.getUsersByBoardId(boardId).stream()
+        return boardAssignmentService.getUsersByBoardId(boardId).stream()
                 .map(userMapper::toDto)
                 .toList();
     }

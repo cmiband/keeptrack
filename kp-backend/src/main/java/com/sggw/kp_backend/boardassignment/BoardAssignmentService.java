@@ -1,5 +1,7 @@
 package com.sggw.kp_backend.boardassignment;
 
+import com.sggw.kp_backend.user.User;
+import com.sggw.kp_backend.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -8,6 +10,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardAssignmentService {
     private final BoardAssignmentRepository boardAssignmentRepository;
+    private final UserRepository userRepository;
 
     public BoardAssignment getBoardAssignmentById(int id) {
         return boardAssignmentRepository.findById(id)
@@ -40,5 +43,17 @@ public class BoardAssignmentService {
         boardAssignment.setBoardId(request.getBoardId());
         boardAssignment.setUserId(request.getUserId());
         boardAssignmentRepository.save(boardAssignment);
+    }
+
+    public List<User> getUsersByBoardId(int boardId) {
+        var userIds = boardAssignmentRepository.findByBoardId(boardId).stream()
+                .map(BoardAssignment::getUserId)
+                .toList();
+
+        if (userIds.isEmpty()) {
+            return List.of();
+        }
+
+        return userRepository.findAllById(userIds);
     }
 }
