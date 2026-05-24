@@ -12,7 +12,7 @@
             </div>
         </button>
         }
-        <button class="btn-createWorkspace">+ createworkspace</button>
+        <button class="btn-createWorkspace" (click)="openCreateWorkspace()">+ create workspace</button>
     </div>
 
     <div class="middle-column-wrapper">
@@ -71,14 +71,12 @@
             @for (item of users(); track item.id) {
                 @if (userData.id !== item.id) {
                     <div style="display: flex; align-items: center; margin-top: 4px;">
-                        <div class="btn-long-icon direct-messages-user-avatar" [style.backgroundColor]="item.color">
-                            {{item.firstName[0]}}{{item.lastName[0]}}
-                        </div>
-                        <button class="direct-messages-user">
-                            {{item.firstName}} {{item.lastName}}</button>
+                    <div class="btn-long-icon direct-messages-user-avatar" [style.backgroundColor]="item.color">
+                        {{item.firstName[0]}}{{item.lastName[0]}}
                     </div>
                     <button class="direct-messages-user">
-                        {{item.firstName}} {{item.lastName}}</button>
+                        {{item.firstName}} {{item.lastName}}
+                    </button>
                     @if (isCurrentUserBoardAuthor) {
                     <img src="trash.svg" style="width: 16px; height: 16px; cursor: pointer; margin-left: 8px;" (click)="removeUserFromBoard(item.id)" />
                     }
@@ -91,3 +89,10 @@
 @if(isAddTaskMenuOpen) {
     <app-add-task (taskAdded)="ngOnInit()" [statuses]="statuses()" [boardID]="openedBoard?.id" [users]="users()" [currentUser]="userData" (close)="closeAddTaskMenu()"></app-add-task>
 }
+@if (isCreateWorkspaceOpen) {
+      <app-create-workspace
+        [currentUser]="userData"
+        (close)="closeCreateWorkspace()"
+        (boardCreated)="onBoardCreated()">
+      </app-create-workspace>
+    }

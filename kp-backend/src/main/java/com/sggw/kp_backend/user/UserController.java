@@ -79,4 +79,17 @@ public class UserController {
                 "message", ex.getMessage()
         ));
     }
+
+    @GetMapping("/by-email")
+    public ResponseEntity<UserDto> getUserByEmail(@RequestParam String email) {
+        User user = userService.findByEmail(email);
+        return ResponseEntity.ok(userMapper.toDto(user));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<UserDto>> searchByEmail(@RequestParam String email) {
+        return ResponseEntity.ok(userService.searchByEmail(email).stream()
+                .map(userMapper::toDto)
+                .toList());
+    }
 }

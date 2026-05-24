@@ -7,11 +7,12 @@ import { TaskList } from '../task-list/task-list';
 import { KanbanView } from '../kanban-view/kanban-view';
 import { API_ENDPOINT, BoardData, DEFAULT_USER, UserData, OpenedBoard, TaskData, TaskStatusData, UsersWithTaskId, GroupedTasks, ListTask, Assignee, ListUser, TaskUpdateEvent } from '../constants';
 import { AddTask } from '../add-task/add-task';
+import { CreateWorkspace } from '../create-workspace/create-workspace';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [KanbanView, TaskList, AddTask],
+  imports: [KanbanView, TaskList, AddTask, CreateWorkspace],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -31,7 +32,7 @@ export class Home {
   tasks: TaskData[] = [];
   usersByTasks: UsersWithTaskId[] = [];
   openedBoard: OpenedBoard | undefined;
-
+  isCreateWorkspaceOpen: boolean = false;
   users = signal<ListUser[]>([]);
 
   currentUser = ['', ''];
@@ -105,6 +106,10 @@ export class Home {
 
   async retrieveUsersByTasks() {
     const taskIds = this.tasks.map((task) => task.taskId);
+    if (!taskIds || taskIds.length === 0) {
+      this.usersByTasks = [];
+      return;
+    }
     const usersByTasks = await firstValueFrom(this.httpClient.post<any>(`${API_ENDPOINT}/task/users/by-task-ids`, {taskIds: taskIds}));
 
     this.usersByTasks = usersByTasks;
@@ -254,5 +259,19 @@ export class Home {
 
   closeAddTaskMenu() {
     this.isAddTaskMenuOpen = false;
+  }
+
+  openCreateWorkspace() {
+    this.isCreateWorkspaceOpen = true;
+  }
+
+  closeCreateWorkspace() {
+    this.isCreateWorkspaceOpen = false;
+  }
+
+  async onBoardCreated() {
+    await this.retrieveBoards(this.userData.id);
+    this.notification.set('Workspace created!');
+    setTimeout(() => this.notification.set(null), 3000);
   }
 }
