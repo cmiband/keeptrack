@@ -40,13 +40,33 @@
         <div class="activity-title">activity</div>
 
         <div class="activity-content custom-scroll">
-          <!-- tutaj komenatrze -->
+          @for (comment of comments; track comment.taskCommentId) {
+            <div class="comment-item" style="margin-bottom: 12px; padding: 6px; border-bottom: 1px solid #eee;">
+              <div class="comment-header" style="display: flex; justify-content: space-between; font-size: 12px; color: gray;">
+                <span>User #{{ comment.authorId }}</span>
+                <span>{{ comment.createdDate }}</span>
+              </div>
+              <div class="comment-body" style="font-size: 14px; margin-top: 4px; color: #333;">
+                {{ comment.commentBody }}
+              </div>
+            </div>
+          } @empty {
+            <p style="color: gray; font-size: 13px; text-align: center; margin-top: 20px;">No comments yet.</p>
+          }
         </div>
 
         <div class="add-comment-wrapper">
           <div class="add-comment-input-box">
-            <input type="text" placeholder="add comment..." class="comment-input">
-            <button class="add-btn"><i class="fa-solid fa-plus"></i></button>
+            <input 
+              type="text" 
+              placeholder="add comment..." 
+              class="comment-input" 
+              [(ngModel)]="newCommentText" 
+              (keydown.enter)="addComment()"
+            >
+            <button class="add-btn" (click)="addComment()">
+              <i class="fa-solid fa-plus"></i>
+            </button>
           </div>
         </div>
       </div>

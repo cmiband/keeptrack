@@ -68,23 +68,24 @@
                     [class]="directMeesageExpand ? 'fa-caret-down' : 'fa-caret-right'"></i>
             </button>
             @if (directMeesageExpand) {
-            @for (item of users(); track item.id) {
-                @if (userData.id !== item.id) {
-                    <div style="display: flex; align-items: center; margin-top: 4px;">
-                        <div class="btn-long-icon direct-messages-user-avatar" [style.backgroundColor]="item.color">
-                            {{item.firstName[0]}}{{item.lastName[0]}}
-                        </div>
-                        <button class="direct-messages-user">
-                            {{item.firstName}} {{item.lastName}}</button>
+        @for (item of users(); track item.id) {
+            @if (userData.id !== item.id) {
+                <div style="display: flex; align-items: center; margin-top: 4px;">
+                    <div class="btn-long-icon direct-messages-user-avatar" [style.backgroundColor]="item.color">
+                        {{item.firstName[0]}}{{item.lastName[0]}}
                     </div>
+                    
                     <button class="direct-messages-user">
-                        {{item.firstName}} {{item.lastName}}</button>
+                        {{item.firstName}} {{item.lastName}}
+                    </button>
+
                     @if (isCurrentUserBoardAuthor) {
-                    <img src="trash.svg" style="width: 16px; height: 16px; cursor: pointer; margin-left: 8px;" (click)="removeUserFromBoard(item.id)" />
+                        <img src="trash.svg" style="width: 16px; height: 16px; cursor: pointer; margin-left: 8px;" (click)="removeUserFromBoard(item.id)" />
                     }
                 </div>
-                }
-            }}
+            }
+        }
+    }
         </div>
     </div>
 </div>

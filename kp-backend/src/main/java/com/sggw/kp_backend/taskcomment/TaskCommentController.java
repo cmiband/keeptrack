@@ -25,9 +25,17 @@ public class TaskCommentController {
         return taskCommentMapper.toDto(taskCommentService.getTaskCommentById(id));
     }
 
+    @GetMapping("/task/{taskId}")
+    public List<TaskCommentDto> getTaskCommentsByTaskId(@PathVariable int taskId) {
+        return taskCommentService.getTaskCommentsByTaskId(taskId).stream()
+                .map(taskCommentMapper::toDto)
+                .toList();
+    }
+
     @PostMapping("/create")
-    public TaskComment createTaskComment(@Valid @RequestBody TaskCommentCreateRequest request) {
-        return taskCommentService.createTaskComment(request);
+    public TaskCommentDto createTaskComment(@Valid @RequestBody TaskCommentCreateRequest request) {
+        TaskComment createdComment = taskCommentService.createTaskComment(request);
+        return taskCommentMapper.toDto(createdComment);
     }
 
     @DeleteMapping("/{id}")

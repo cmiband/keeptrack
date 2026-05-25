@@ -7,5 +7,5 @@ import java.util.List;
 
 @Repository
 public interface TaskCommentRepository extends JpaRepository<TaskComment, Integer> {
-    List<TaskComment> findByTaskId(Integer taskId);
+    List<TaskComment> findByTaskIdOrderByCreatedDateAsc(Integer taskId);
 }
