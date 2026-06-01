@@ -21,14 +21,13 @@ public class TaskCommentService {
     }
 
     public List<TaskComment> getTaskCommentsByTaskId(int taskId) {
-        return taskCommentRepository.findByTaskId(taskId);
+        return taskCommentRepository.findByTaskIdOrderByCreatedDateAsc(taskId);
     }
 
     public TaskComment createTaskComment(TaskCommentCreateRequest request) {
         TaskComment taskComment = new TaskComment(null, request.getAuthorId(),
                 LocalDate.now(), request.getCommentBody(), request.getTaskId());
-        taskCommentRepository.save(taskComment);
-        return taskComment;
+        return taskCommentRepository.save(taskComment);
     }
 
     public void deleteTaskComment(int id) {
