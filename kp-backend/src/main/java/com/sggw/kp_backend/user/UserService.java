@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -52,5 +53,17 @@ public class UserService {
     public User getUserById(int userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+    }
+
+    public User findByEmail(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new IllegalArgumentException("User not found with email: " + email);
+        }
+        return user;
+    }
+
+    public List<User> searchByEmail(String email) {
+        return userRepository.findByEmailContainingIgnoreCase(email);
     }
 }

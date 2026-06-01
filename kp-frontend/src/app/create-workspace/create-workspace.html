@@ -1,0 +1,60 @@
+<div class="modal-overlay" (click)="onOverlayClick($event)">
+  <div class="modal-box">
+    <button class="modal-close" (click)="close.emit()">✕</button>
+
+    <h2 class="modal-title">create a workspace</h2>
+
+    <label class="modal-label">name your workspace:</label>
+    <input
+      class="modal-input"
+      [(ngModel)]="boardName"
+      placeholder="name..."
+    />
+
+    <label class="modal-label">add users:</label>
+    <div class="users-box">
+      <div class="email-input-wrapper">
+        <input
+          class="email-input"
+          [(ngModel)]="emailInput"
+          (ngModelChange)="onEmailInput()"
+          (blur)="hideSuggestions()"
+          placeholder="type e-mail..."
+        />
+        @if (showSuggestions) {
+          <div class="suggestions-dropdown">
+            @for (user of suggestions; track user.id) {
+              <div class="suggestion-item" (mousedown)="selectSuggestion(user)">
+                <div class="suggestion-avatar" [style.backgroundColor]="'#4caf7d'">
+                  {{ user.firstName[0] }}{{ user.lastName[0] }}
+                </div>
+                <div class="suggestion-info">
+                  <span class="suggestion-name">{{ user.firstName }} {{ user.lastName }}</span>
+                  <span class="suggestion-email">{{ user.email }}</span>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+      <div class="chips-container">
+        @for (user of addedUsers; track user.id) {
+          <div class="chip" [style.borderColor]="user.color">
+            <div class="chip-avatar" [style.backgroundColor]="user.color">
+              {{ user.firstName[0] }}{{ user.lastName[0] }}
+            </div>
+            <span class="chip-name">{{ user.firstName }} {{ user.lastName }}</span>
+            <button class="chip-remove" (click)="removeUser(user.id)">✕</button>
+          </div>
+        }
+      </div>
+      @if (emailError) {
+        <div class="email-error">{{ emailError }}</div>
+      }
+    </div>
+
+    <button class="btn-create" (click)="onCreate()" [disabled]="isLoading">
+      @if (isLoading) { creating... } @else { create ✓ }
+    </button>
+  </div>
+</div>

@@ -12,7 +12,7 @@
             </div>
         </button>
         }
-        <button class="btn-createWorkspace">+ createworkspace</button>
+        <button class="btn-createWorkspace" (click)="openCreateWorkspace()">+ create workspace</button>
     </div>
 
     <div class="middle-column-wrapper">
@@ -92,3 +92,10 @@
 @if(isAddTaskMenuOpen) {
     <app-add-task (taskAdded)="ngOnInit()" [statuses]="statuses()" [boardID]="openedBoard?.id" [users]="users()" [currentUser]="userData" (close)="closeAddTaskMenu()"></app-add-task>
 }
+@if (isCreateWorkspaceOpen) {
+      <app-create-workspace
+        [currentUser]="userData"
+        (close)="closeCreateWorkspace()"
+        (boardCreated)="onBoardCreated()">
+      </app-create-workspace>
+    }
