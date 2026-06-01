@@ -76,7 +76,7 @@ export class TaskInfo {
     }
 
     const storedUser = localStorage.getItem('currentUser'); 
-    let currentUserId = 1; // Domyślny fallback jeśli brak sesji
+    let currentUserId = 1; 
 
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
