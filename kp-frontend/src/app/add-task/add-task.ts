@@ -113,6 +113,7 @@ export class AddTask {
     }
 
     this.taskAdded.emit();
+    this.onClose();
   }
 
   async assignUser(assignment: TaskAssignment) {
