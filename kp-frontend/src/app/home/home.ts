@@ -1,4 +1,4 @@
-import { Component, inject, signal, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, signal, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
@@ -17,6 +17,8 @@ import { CreateWorkspace } from '../create-workspace/create-workspace';
   styleUrl: './home.css',
 })
 export class Home {
+  @ViewChild('filters') filtersList !: ElementRef;
+
   userData: UserData = DEFAULT_USER;
   activebutton: string = 'list';
 
@@ -24,6 +26,7 @@ export class Home {
 
   tasksByStatus = signal<GroupedTasks>({});
   statuses = signal<TaskStatusData[]>([]);
+  filteredStatuses = signal<TaskStatusData[]>([]);
 
   currentBoard = signal<OpenedBoard | undefined>(undefined);
 
@@ -33,6 +36,7 @@ export class Home {
   usersByTasks: UsersWithTaskId[] = [];
   openedBoard: OpenedBoard | undefined;
   isCreateWorkspaceOpen: boolean = false;
+  filtersOpened: boolean = false;
   users = signal<ListUser[]>([]);
 
   currentUser = ['', ''];
@@ -119,6 +123,7 @@ export class Home {
     const statuses = await firstValueFrom(this.httpClient.get<TaskStatusData[]>(`${API_ENDPOINT}/task-status/board/${boardId}`));
 
     this.statuses.set(statuses);
+    this.filteredStatuses.set(statuses);
   }
 
   async retrieveUsersByTasks() {
@@ -285,8 +290,50 @@ export class Home {
     this.isCreateWorkspaceOpen = true;
   }
 
+  openFilters(event: MouseEvent) {
+    this.filtersOpened = !this.filtersOpened;
+
+    setTimeout(() => {
+      if(!this.filtersList) {
+        return;
+      }
+
+      this.filtersList.nativeElement.style.display = this.filtersOpened ? '' : 'none';
+      this.filtersList.nativeElement.style.top = (event.clientY+20).toString()+'px';
+      this.filtersList.nativeElement.style.left = event.clientX.toString()+'px';
+    }, 15);
+  }
+
+  handleStatusFilter(event: MouseEvent) {
+    const eventTarget = event.target as HTMLInputElement;
+    const statusId = eventTarget.dataset['status'];
+    if(!statusId) {
+      return;
+    }
+    const status = this.statuses().find((status) => Number(status.taskStatusId) === Number(statusId));
+    
+    if(!status) {
+      return;
+    }
+
+    const showStatus = eventTarget.checked;
+    const filteredStatuses = this.filteredStatuses();
+    if(showStatus) {
+      filteredStatuses.push(status);
+      filteredStatuses.sort((a,b) => a.statusOrder-b.statusOrder);
+
+      this.filteredStatuses.set(filteredStatuses);
+    } else {
+      this.filteredStatuses.set(filteredStatuses.filter((status) => status.taskStatusId != statusId));
+    }
+  }
+
   closeCreateWorkspace() {
     this.isCreateWorkspaceOpen = false;
+  }
+
+  checkIfStatusIsSelected(statusId: string): boolean {
+    return !!this.filteredStatuses().find((status) => status.taskStatusId===statusId);
   }
 
   async onBoardCreated(newBoardId?: string) {

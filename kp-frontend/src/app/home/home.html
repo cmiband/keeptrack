@@ -25,21 +25,31 @@
                 (click)="handleClick('kanban')">
                 <i class="fas fa-columns"></i> kanban
             </button>
-            <button class="btn btn-filter">
+            <button class="btn btn-filter" (click)="openFilters($event)">
                 <i class="fas fa-caret-down"></i> filter
             </button>
             <button class="btn btn-list-kanban" (click)="openAddTaskMenu()">
                 <i class="fa-solid fa-plus"></i> new task
             </button>
         </div>
+        @if(filtersOpened) {
+            <div style="display: none;" class="filters-list" #filters>
+                @for(status of statuses(); track status.taskStatusId) {
+                    <div>
+                        <input type="checkbox" [id]="status.taskStatusId" [attr.data-status]="status.taskStatusId" (click)="handleStatusFilter($event)" [checked]="checkIfStatusIsSelected(status.taskStatusId)">
+                        <label [for]="status.taskStatusId">{{ status.statusLabel }}</label>
+                    </div>
+                }
+            </div>
+        }
         
         <div class="box middle-box" style="background-color: transparent; box-shadow: none;">
             @if(dataLoaded()) {
                 @if (activebutton === 'list') {
-                    <app-task-list [currentBoard]="currentBoard()" [tasksByStatus]="tasksByStatus()" [statuses]="statuses()" (singleTaskUpdate)="handleTaskUpdate($event)" (tasksChange)="handleTaskListUpdate($event)"></app-task-list>
+                    <app-task-list [currentBoard]="currentBoard()" [tasksByStatus]="tasksByStatus()" [statuses]="filteredStatuses()" (singleTaskUpdate)="handleTaskUpdate($event)" (tasksChange)="handleTaskListUpdate($event)"></app-task-list>
                 }
                 @if (activebutton === 'kanban') {
-                    <app-kanban-view [currentBoard]="currentBoard()" [tasksByStatus]="tasksByStatus()" [statuses]="statuses()" (singleTaskUpdate)="handleTaskUpdate($event)" (tasksChange)="handleTaskListUpdate($event)"></app-kanban-view>
+                    <app-kanban-view [currentBoard]="currentBoard()" [tasksByStatus]="tasksByStatus()" [statuses]="filteredStatuses()" (singleTaskUpdate)="handleTaskUpdate($event)" (tasksChange)="handleTaskListUpdate($event)"></app-kanban-view>
                 }
             }
         </div>
@@ -98,4 +108,4 @@
         (close)="closeCreateWorkspace()"
         (boardCreated)="onBoardCreated($event)">
       </app-create-workspace>
-    }
+}
