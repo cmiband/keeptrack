@@ -5,7 +5,7 @@
 <div class="container">
     <div class="box side-box">
         @for (item of boards(); track item[0]) {
-        <button class="board">
+        <button class="board" (click)="selectBoard(item[0], item[1])">
             <div class="board-square" [style.backgroundColor]="item[2]">{{ item[1][0] }}</div>
             <div class="board-info">
                 <div class="board-title">{{item[1]}}</div>
@@ -17,7 +17,7 @@
 
     <div class="middle-column-wrapper">
         <div class="title-row">
-            <div class="title-text">projectszpont</div>
+            <div class="title-text">{{ currentBoard()?.boardName }}</div>
             <button class="btn btn-list-kanban" [class.active]="activebutton === 'list'" (click)="handleClick('list')">
                 <i class="fas fa-list-ul"></i> list
             </button>
@@ -90,12 +90,12 @@
     </div>
 </div>
 @if(isAddTaskMenuOpen) {
-    <app-add-task (taskAdded)="ngOnInit()" [statuses]="statuses()" [boardID]="openedBoard?.id" [users]="users()" [currentUser]="userData" (close)="closeAddTaskMenu()"></app-add-task>
+    <app-add-task (taskAdded)="refreshCurrentBoard()" [statuses]="statuses()" [boardID]="openedBoard?.id" [users]="users()" [currentUser]="userData" (close)="closeAddTaskMenu()"></app-add-task>
 }
 @if (isCreateWorkspaceOpen) {
       <app-create-workspace
         [currentUser]="userData"
         (close)="closeCreateWorkspace()"
-        (boardCreated)="onBoardCreated()">
+        (boardCreated)="onBoardCreated($event)">
       </app-create-workspace>
     }

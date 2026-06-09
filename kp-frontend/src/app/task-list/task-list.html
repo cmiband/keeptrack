@@ -13,10 +13,10 @@
           class="drop-zone"
           [attr.data-status]="status.taskStatusId"
           cdkDropList
-          [cdkDropListData]="tasksByStatus()[status.statusName]"
+          [cdkDropListData]="tasksByStatus()[status.statusName] || []"
           (cdkDropListDropped)="drop($event)">
-          
-          @for (task of tasksByStatus()[status.statusName]; track task.id) {
+
+          @for (task of tasksByStatus()[status.statusName] || []; track task.id) {
             <div class="task-card" cdkDrag [cdkDragData]="task" (click)="openTaskInfo(task.id, status.statusColor, status.statusLabel,task.assignees)">
               <div class="status-dot" [style.background-color]="status.statusColor"></div>
               
@@ -36,7 +36,7 @@
             </div>
           }
           
-          @if (tasksByStatus()[status.statusName].length === 0) {
+          @if ((tasksByStatus()[status.statusName] || []).length === 0) {
             <div class="empty-drop-zone">Brak zadań w tym statusie</div>
           }
         </div>

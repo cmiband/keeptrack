@@ -92,7 +92,7 @@ export class AddTask {
   }
 
   findStatusId() {
-    const todoStatus = this.statuses?.find(status => status.statusName === 'todo');
+    const todoStatus = this.statuses?.find(status => status.statusName === 'TODO');
 
     if (todoStatus) {
       const taskStatusId = todoStatus.taskStatusId;
@@ -104,15 +104,16 @@ export class AddTask {
 
   async createTaskDB(newTask: {}) {
     const response = await firstValueFrom(this.httpClient.post<TaskData>(`${API_ENDPOINT}/task/create`, newTask));
-    
+
     const newTaskId = response.taskId;
 
     for(const userId of this.assignedUsers) {
       const assignment: TaskAssignment = {taskId: Number(newTaskId), userId: userId};
       await this.assignUser(assignment);
     }
-    
+
     this.taskAdded.emit();
+    this.onClose();
   }
 
   async assignUser(assignment: TaskAssignment) {

@@ -16,7 +16,7 @@ import { API_ENDPOINT, ListUser, UserData } from '../constants';
 export class CreateWorkspace {
   @Input() currentUser!: UserData;
   @Output() close = new EventEmitter<void>();
-  @Output() boardCreated = new EventEmitter<void>();
+  @Output() boardCreated = new EventEmitter<string>();
 
   private http = inject(HttpClient);
 
@@ -109,7 +109,7 @@ export class CreateWorkspace {
         );
       }
 
-      this.boardCreated.emit();
+      this.boardCreated.emit(boardId);
       this.close.emit();
     } catch (e) {
       console.error(e);

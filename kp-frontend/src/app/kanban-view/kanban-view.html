@@ -6,10 +6,10 @@
             <div class="tasks-list" 
             [attr.data-status]="status.taskStatusId"
             cdkDropList 
-            [cdkDropListData]="tasksByStatus()[status.statusName]"
+            [cdkDropListData]="tasksByStatus()[status.statusName] || []"
             (cdkDropListDropped)="drop($event)"
             >
-                @for(task of tasksByStatus()[status.statusName]; track task.id) {
+                @for(task of tasksByStatus()[status.statusName] || []; track task.id) {
                     <div class="task-tile" cdkDrag [cdkDragData]="task" (click)="openTaskInfo(task.id, status.statusColor, status.statusLabel,task.assignees)">
                         {{task.title}}
                         <div class="assignees-and-due-time">
