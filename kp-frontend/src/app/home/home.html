@@ -90,7 +90,7 @@
     </div>
 </div>
 @if(isAddTaskMenuOpen) {
-    <app-add-task (taskAdded)="ngOnInit()" [statuses]="statuses()" [boardID]="openedBoard?.id" [users]="users()" [currentUser]="userData" (close)="closeAddTaskMenu()"></app-add-task>
+    <app-add-task (taskAdded)="refreshCurrentBoard()" [statuses]="statuses()" [boardID]="openedBoard?.id" [users]="users()" [currentUser]="userData" (close)="closeAddTaskMenu()"></app-add-task>
 }
 @if (isCreateWorkspaceOpen) {
       <app-create-workspace

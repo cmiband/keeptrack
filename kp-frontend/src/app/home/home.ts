@@ -84,6 +84,11 @@ export class Home {
     this.groupTasksByStatus();
   }
 
+  async refreshCurrentBoard() {
+    if (!this.openedBoard) return;
+    await this.loadBoard(this.openedBoard.id, this.openedBoard.boardName);
+  }
+
   async selectBoard(boardId: string, boardName: string) {
     if (this.openedBoard?.id === boardId) {
       return;
