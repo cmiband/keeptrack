@@ -249,6 +249,16 @@
     text-overflow: ellipsis;
 }
 
+.filters-list {
+    position: fixed;
+    z-index: 100;
+    width: 20vw;
+    height: fit-content;
+    background-color: white;
+    border-radius: 10px;
+    padding: 5px;
+}
+
 @media (max-width: 750px) {
     .container {
         flex-direction: column;
