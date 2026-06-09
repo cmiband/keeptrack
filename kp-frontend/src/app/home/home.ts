@@ -66,17 +66,29 @@ export class Home {
     if(!this.boards().length) {
       return;
     }
-    this.openedBoard = {id: this.boards()[0][0], boardName: this.boards()[0][1]};
+    await this.loadBoard(this.boards()[0][0], this.boards()[0][1]);
+    this.dataLoaded.set(true);
+  }
+
+  async loadBoard(boardId: string, boardName: string) {
+    this.openedBoard = {id: boardId, boardName: boardName};
     this.currentBoard.set(this.openedBoard);
 
-    await this.retrieveTasks(this.openedBoard.id);
-    await this.retrieveUsers(this.openedBoard.id);
-    await this.retrieveStatuses(this.openedBoard.id);
+    this.tasksByStatus.set({});
+
+    await this.retrieveTasks(boardId);
+    await this.retrieveUsers(boardId);
+    await this.retrieveStatuses(boardId);
     await this.retrieveUsersByTasks();
 
     this.groupTasksByStatus();
+  }
 
-    this.dataLoaded.set(true);
+  async selectBoard(boardId: string, boardName: string) {
+    if (this.openedBoard?.id === boardId) {
+      return;
+    }
+    await this.loadBoard(boardId, boardName);
   }
 
   async retrieveBoards(userId: string) {
@@ -122,8 +134,9 @@ export class Home {
   }
 
   groupTasksByStatus() {
+    const grouped: GroupedTasks = {};
     this.statuses().forEach((status) => {
-      this.tasksByStatus()[status.statusName] = [];
+      grouped[status.statusName] = [];
     });
 
     this.tasks.forEach((task) => {
@@ -141,8 +154,10 @@ export class Home {
         isOverdue: this.checkIfTaskIsOverdue(task)
       }
 
-      this.tasksByStatus()[status.statusName].push(listTask);
+      grouped[status.statusName].push(listTask);
     });
+
+    this.tasksByStatus.set(grouped);
   }
 
   composeAssignees(task: TaskData): Assignee[] {
@@ -269,8 +284,15 @@ export class Home {
     this.isCreateWorkspaceOpen = false;
   }
 
-  async onBoardCreated() {
+  async onBoardCreated(newBoardId?: string) {
     await this.retrieveBoards(this.userData.id);
+    if (newBoardId) {
+      const created = this.boards().find(b => b[0] === newBoardId);
+      if (created) {
+        await this.loadBoard(created[0], created[1]);
+        this.dataLoaded.set(true);
+      }
+    }
     this.notification.set('Workspace created!');
     setTimeout(() => this.notification.set(null), 3000);
   }
