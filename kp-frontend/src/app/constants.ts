@@ -36,7 +36,8 @@ export interface TaskStatusData {
     statusName: string,
     statusLabel: string,
     statusColor: string,
-    statusOrder: number
+    statusOrder: number,
+    boardId: string
 }
 
 export interface TaskAssignment {

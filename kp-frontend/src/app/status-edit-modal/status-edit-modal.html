@@ -1,0 +1,160 @@
+<div class="modal-backdrop" (click)="onDismiss()">
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <div class="modal__header">
+      <div class="modal__header-left">
+        <span class="modal__icon">⚙</span>
+        <div>
+          <h2 class="modal__title">Manage Statuses</h2>
+          <p class="modal__subtitle">{{ sortedList().length }} status{{ sortedList().length !== 1 ? 'es' : '' }} defined</p>
+        </div>
+      </div>
+      <button class="btn-icon" (click)="onDismiss()" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M12 4L4 12M4 4l8 8" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="modal__body">
+
+      <div class="insert-zone" [class.insert-zone--active]="isSlotActive(null)">
+        <button
+          class="insert-btn"
+          [class.insert-btn--active]="isSlotActive(null)"
+          (click)="isSlotActive(null) ? closeAddForm() : openAddForm(null)"
+          aria-label="Add status at the beginning"
+        >
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+          </svg>
+          <span>Add at the beginning</span>
+        </button>
+
+        <div class="add-form" *ngIf="isSlotActive(null) && isFormOpen">
+          <ng-container *ngTemplateOutlet="addFormTpl"></ng-container>
+        </div>
+      </div>
+
+      <ng-container *ngFor="let status of sortedList(); trackBy: trackById; let last = last">
+
+        <div class="status-card">
+          <div class="status-card__bar" [style.background]="status.statusColor"></div>
+          <div class="status-card__body">
+            <div class="status-card__info">
+              <span class="status-card__label">{{ status.statusLabel }}</span>
+              <span class="status-card__api">{{ status.statusName }}</span>
+            </div>
+            <div class="status-card__meta">
+              <span
+                class="status-badge"
+                [style.background]="status.statusColor + '22'"
+                [style.color]="darken(status.statusColor)"
+                [style.border-color]="status.statusColor + '55'"
+              >
+                {{ status.statusColor }}
+              </span>
+              <span class="status-card__order">#{{ status.statusOrder }}</span>
+            </div>
+          </div>
+          <button
+            class="btn-icon btn-icon--danger"
+            (click)="removeStatus(status.taskStatusId)"
+            aria-label="Remove status"
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2 4h10M5 4V2.5h4V4M5.5 6.5v4M8.5 6.5v4M3 4l.8 7.2A1 1 0 004.8 12h4.4a1 1 0 001-.8L11 4"
+                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="insert-zone" [class.insert-zone--active]="isSlotActive(status.statusOrder)">
+          <button
+            class="insert-btn"
+            [class.insert-btn--active]="isSlotActive(status.statusOrder)"
+            (click)="isSlotActive(status.statusOrder) ? closeAddForm() : openAddForm(status.statusOrder)"
+            [attr.aria-label]="'Add status after ' + status.statusLabel"
+          >
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+            </svg>
+            <span>Add {{ last ? 'at the end' : 'after ' + status.statusLabel }}</span>
+          </button>
+
+          <div class="add-form" *ngIf="isSlotActive(status.statusOrder) && isFormOpen">
+            <ng-container *ngTemplateOutlet="addFormTpl"></ng-container>
+          </div>
+        </div>
+
+      </ng-container>
+
+      <div class="empty-state" *ngIf="sortedList().length === 0 && !isFormOpen">
+        <div class="empty-state__icon">📋</div>
+        <p class="empty-state__text">No statuses yet. Add the first one above.</p>
+      </div>
+
+    </div>
+
+    <div class="modal__footer">
+      <button class="btn btn--ghost" (click)="onDismiss()">Cancel</button>
+      <button class="btn btn--primary" (click)="onSave()">
+        Save changes
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<ng-template #addFormTpl>
+  <div class="add-form__inner">
+    <div class="add-form__fields">
+      <div class="field">
+        <label class="field__label" for="status-label">Label</label>
+        <input
+          id="status-label"
+          class="field__input"
+          type="text"
+          placeholder="e.g. In Review"
+          [(ngModel)]="form.label"
+          (keydown.enter)="confirmAdd()"
+          (keydown.escape)="closeAddForm()"
+          autofocus
+        />
+      </div>
+      <div class="field field--color">
+        <label class="field__label" for="status-color">Color</label>
+        <div class="color-input-wrap">
+          <input
+            id="status-color"
+            class="field__color-picker"
+            type="color"
+            [(ngModel)]="form.color"
+          />
+          <span class="field__color-hex">{{ form.color }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="add-form__preview" *ngIf="form.label">
+      <span
+        class="status-badge status-badge--preview"
+        [style.background]="form.color + '22'"
+        [style.color]="darken(form.color)"
+        [style.border-color]="form.color + '55'"
+        [style.border-left]="'3px solid ' + form.color"
+      >
+        {{ form.label }}
+      </span>
+    </div>
+    <div class="add-form__actions">
+      <button class="btn btn--ghost btn--sm" (click)="closeAddForm()">Cancel</button>
+      <button
+        class="btn btn--primary btn--sm"
+        (click)="confirmAdd()"
+        [disabled]="!form.label.trim()"
+      >
+        Add status
+      </button>
+    </div>
+  </div>
+</ng-template>

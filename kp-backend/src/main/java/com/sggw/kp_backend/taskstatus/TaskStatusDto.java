@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TaskStatusDto {
+    private Integer boardId;
     private Integer taskStatusId;
     private String statusName;
     private String statusLabel;

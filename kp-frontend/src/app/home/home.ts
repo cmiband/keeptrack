@@ -5,6 +5,7 @@ import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../auth.service';
 import { TaskList } from '../task-list/task-list';
 import { KanbanView } from '../kanban-view/kanban-view';
+import { StatusEditModal } from '../status-edit-modal/status-edit-modal';
 import { API_ENDPOINT, BoardData, DEFAULT_USER, UserData, OpenedBoard, TaskData, TaskStatusData, UsersWithTaskId, GroupedTasks, ListTask, Assignee, ListUser, TaskUpdateEvent } from '../constants';
 import { AddTask } from '../add-task/add-task';
 import { CreateWorkspace } from '../create-workspace/create-workspace';
@@ -12,7 +13,7 @@ import { CreateWorkspace } from '../create-workspace/create-workspace';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [KanbanView, TaskList, AddTask, CreateWorkspace],
+  imports: [KanbanView, TaskList, AddTask, CreateWorkspace, StatusEditModal],
   templateUrl: './home.html',
   styleUrl: './home.css',
 })
@@ -36,6 +37,7 @@ export class Home {
   usersByTasks: UsersWithTaskId[] = [];
   openedBoard: OpenedBoard | undefined;
   isCreateWorkspaceOpen: boolean = false;
+  isEditStatusesOpen: boolean = false;
   filtersOpened: boolean = false;
   users = signal<ListUser[]>([]);
 
@@ -330,6 +332,68 @@ export class Home {
 
   closeCreateWorkspace() {
     this.isCreateWorkspaceOpen = false;
+  }
+
+  openEditStatuses() {
+    this.isEditStatusesOpen = true;
+  }
+
+  handleDismissEditTasks() {
+    this.isEditStatusesOpen = false;
+  }
+
+  async handleEditStatuses(statuses: TaskStatusData[]) {
+    if(!this.dataLoaded()) {
+      return;
+    }
+    this.dataLoaded.set(false);
+
+    const statusesToInsert = statuses.filter((status) => status.taskStatusId === "");
+    const statusesToUpdate = statuses.filter((status) => status.taskStatusId !== "");
+    const statusesToDelete = this.getStatusesToDelete(statuses);
+
+    const promises: Promise<void>[] = [];
+    statusesToInsert.forEach((status) => {
+      const dto = status as any;
+      delete dto['taskStatusId'];
+
+      promises.push(
+        firstValueFrom(this.httpClient.post(`${API_ENDPOINT}/task-status/create`, dto)).then(() => {})
+      );
+    });
+    statusesToUpdate.forEach((status) => {
+      promises.push(
+        firstValueFrom(this.httpClient.put(`${API_ENDPOINT}/task-status/${status.taskStatusId}`, status)).then(()=>{})
+      );
+    });
+    statusesToDelete.forEach((status) => {
+      promises.push(
+        firstValueFrom(this.httpClient.delete(`${API_ENDPOINT}/task-status/${status.taskStatusId}`)).then(()=>{})
+      );
+    });
+    
+    
+    await Promise.all(promises);
+    await this.loadBoard(this.openedBoard?.id || "", this.openedBoard?.boardName || "");
+
+    setTimeout(() => {
+      this.dataLoaded.set(true);
+      this.isEditStatusesOpen = false;
+    }, 15);
+  }
+
+  getStatusesToDelete(newList: TaskStatusData[]) {
+    const result: TaskStatusData[] = [];
+
+    this.statuses().forEach((status) => {
+      const existsInList = newList.find((s) => s.taskStatusId === status.taskStatusId) !== undefined;
+
+      if(!existsInList) {
+        result.push(status);
+      }
+    });
+
+    return result;
   }
 
   checkIfStatusIsSelected(statusId: string): boolean {
