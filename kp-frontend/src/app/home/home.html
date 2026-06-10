@@ -31,6 +31,9 @@
             <button class="btn btn-list-kanban" (click)="openAddTaskMenu()">
                 <i class="fa-solid fa-plus"></i> new task
             </button>
+            <button class="btn btn-list-kanban" (click)="openEditStatuses()">
+                <i class="fa-solid fa-plus"></i> statuses
+            </button>
         </div>
         @if(filtersOpened) {
             <div style="display: none;" class="filters-list" #filters>
@@ -108,4 +111,7 @@
         (close)="closeCreateWorkspace()"
         (boardCreated)="onBoardCreated($event)">
       </app-create-workspace>
+}
+@if(isEditStatusesOpen) {
+    <app-status-edit-modal [boardId]="currentBoard()?.id || ''" [statuses]="statuses()" (dismiss)="handleDismissEditTasks()" (save)="handleEditStatuses($event)"></app-status-edit-modal>
 }

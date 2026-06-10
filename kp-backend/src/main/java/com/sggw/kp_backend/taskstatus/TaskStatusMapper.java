@@ -13,6 +13,7 @@ public class TaskStatusMapper {
                 .statusLabel(taskStatus.getStatusLabel())
                 .statusColor(taskStatus.getStatusColor())
                 .statusOrder(taskStatus.getStatusOrder())
+                .boardId(taskStatus.getBoardId())
                 .build();
     }
 }
