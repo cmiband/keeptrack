@@ -70,10 +70,30 @@
         <button class="btn-long" (click)="handleLogout()">
             <p class="btn-long-text">Log out <i class="fas fa-caret-right" style="color: gray;"></i></p>
         </button>
-        <button class="btn-long" style="background-color: white;margin-top: 0px; color: gray;">
+        <div style="position: relative;">
+          <button class="btn-long" style="background-color: white;margin-top: 0px; color: gray;" (click)="toggleMyTasks()">
             <i class="fas fa-user btn-long-icon2" style="font-size: 28px;"></i>
             <p class="btn-long-text">my tasks</p>
-        </button>
+          </button>
+      
+          @if (isMyTasksOpen) {
+            <div class="my-tasks-popup">
+              <div class="my-tasks-header">
+                <span>my tasks</span>
+                <i class="fas fa-times" (click)="closeMyTasks()" style="cursor: pointer;"></i>
+              </div>
+              @for (task of myTasks(); track task.id) {
+                <div class="my-tasks-item" [class.overdue]="task.isOverdue">
+                  <span class="my-tasks-title">{{ task.title }}</span>
+                  <span class="my-tasks-due">{{ task.dueText }}</span>
+                </div>
+              }
+              @if (myTasks().length === 0) {
+                <div class="my-tasks-empty">No tasks assigned</div>
+              }
+            </div>
+          }
+        </div>
         <div style="margin: 15px;">
             <button class="direct-messages-style" (click)="toggleDirectMessages()">direct
                 messages
