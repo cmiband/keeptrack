@@ -48,6 +48,9 @@ export class Home {
 
   notification = signal<string | null>(null);
   isAddTaskMenuOpen: boolean = false;
+  isMyTasksOpen: boolean = false;
+  myTasks = signal<ListTask[]>([]);
+
   constructor(
     private cdr: ChangeDetectorRef
   ) {}
@@ -170,6 +173,8 @@ export class Home {
     });
 
     this.tasksByStatus.set(grouped);
+    
+    this.computeMyTasks();
   }
 
   composeAssignees(task: TaskData): Assignee[] {
@@ -411,5 +416,29 @@ export class Home {
     }
     this.notification.set('Workspace created!');
     setTimeout(() => this.notification.set(null), 3000);
+  }
+
+  computeMyTasks() {
+    const myTaskIds = this.usersByTasks
+      .filter(ubt => ubt.users.some(u => u.id === this.userData.id))
+      .map(ubt => ubt.taskId);
+
+    const result: ListTask[] = [];
+    Object.values(this.tasksByStatus()).forEach(list => {
+      list.forEach(task => {
+        if (myTaskIds.includes(task.id)) {
+          result.push(task);
+        }
+      });
+    });
+    this.myTasks.set(result);
+  }
+
+  toggleMyTasks() {
+    this.isMyTasksOpen = !this.isMyTasksOpen;
+  }
+
+  closeMyTasks() {
+    this.isMyTasksOpen = false;
   }
 }
