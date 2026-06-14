@@ -2,7 +2,7 @@
   <div class="modal-content">
 
     <div class="modal-header">
-      <div class="breadcrumbs"><b>{{boardName}}</b></div>
+      <div class="breadcrumbs"><b>{{ boardName }}</b></div>
       <button class="close-btn" (click)="onClose()">✕</button>
     </div>
 
@@ -41,27 +41,34 @@
 
         <div class="activity-content custom-scroll">
           @for (comment of comments; track comment.taskCommentId) {
-            <div class="comment-item" style="margin-bottom: 12px; padding: 6px; border-bottom: 1px solid #eee;">
-              <div class="comment-header" style="display: flex; justify-content: space-between; font-size: 12px; color: gray;">
-                <span>User #{{ comment.authorId }}</span>
-                <span>{{ comment.createdDate }}</span>
+            <div class="comment-card">
+              <div class="comment-header">
+                <div class="comment-author">
+                  <div class="comment-avatar" [style.backgroundColor]="getAuthor(comment.authorId).color">
+                    {{ getAuthor(comment.authorId).initials }}
+                  </div>
+                  <span class="comment-author-name">
+                    {{ getAuthor(comment.authorId).firstName }} {{ getAuthor(comment.authorId).lastName }}
+                  </span>
+                </div>
+                <span class="comment-time">{{ formatCommentTime(comment.createdDate) }}</span>
               </div>
-              <div class="comment-body" style="font-size: 14px; margin-top: 4px; color: #333;">
+              <div class="comment-body">
                 {{ comment.commentBody }}
               </div>
             </div>
           } @empty {
-            <p style="color: gray; font-size: 13px; text-align: center; margin-top: 20px;">No comments yet.</p>
+            <p class="no-comments">No comments yet.</p>
           }
         </div>
 
         <div class="add-comment-wrapper">
           <div class="add-comment-input-box">
-            <input 
-              type="text" 
-              placeholder="add comment..." 
-              class="comment-input" 
-              [(ngModel)]="newCommentText" 
+            <input
+              type="text"
+              placeholder="add comment..."
+              class="comment-input"
+              [(ngModel)]="newCommentText"
               (keydown.enter)="addComment()"
             >
             <button class="add-btn" (click)="addComment()">
