@@ -59,14 +59,10 @@
     </div>
 
     <div class="box side-box">
-        <button class="btn-long">
+        <div class="btn-long">
             <div class="btn-long-icon">{{currentUser[0][0]}}{{currentUser[1][0]}}</div>
-            <p class="btn-long-text">profile <i class="fas fa-caret-right" style="color: gray;"></i></p>
-        </button>
-        <button class="btn-long">
-            <i class="fas fa-gear btn-long-icon2"></i>
-            <p class="btn-long-text">settings <i class="fas fa-caret-right" style="color: gray;"></i></p>
-        </button>
+            <p class="btn-long-text">profile</p>
+        </div>
         <button class="btn-long" (click)="handleLogout()">
             <p class="btn-long-text">Log out <i class="fas fa-caret-right" style="color: gray;"></i></p>
         </button>
@@ -95,8 +91,7 @@
           }
         </div>
         <div style="margin: 15px;">
-            <button class="direct-messages-style" (click)="toggleDirectMessages()">direct
-                messages
+            <button class="direct-messages-style" (click)="toggleDirectMessages()">board members
                 <i class="fas" style="color: gray;"
                     [class]="directMeesageExpand ? 'fa-caret-down' : 'fa-caret-right'"></i>
             </button>
